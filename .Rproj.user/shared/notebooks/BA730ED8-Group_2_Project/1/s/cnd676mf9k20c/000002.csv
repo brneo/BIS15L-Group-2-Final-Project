@@ -1,0 +1,2 @@
+"0","food_supply_2 <- food_supply %>% "
+"0","  rename_all(paste0, ""_x"")"

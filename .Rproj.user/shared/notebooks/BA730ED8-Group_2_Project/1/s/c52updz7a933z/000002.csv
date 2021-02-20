@@ -1,0 +1,12 @@
+"0","protein_supply <- readr::read_csv(""data/Protein_Supply_Quantity_Data.csv"")"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  Country = [31mcol_character()[39m,
+  Undernourished = [31mcol_character()[39m,
+  `Unit (all except Population)` = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;235m[48;5;253m[38;5;235m[48;5;253m`spec()`[48;5;253m[38;5;235m[49m[39m for the full column specifications.
+
+"

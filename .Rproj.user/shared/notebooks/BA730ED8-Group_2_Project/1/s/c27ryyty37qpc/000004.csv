@@ -1,0 +1,3 @@
+"0","fat_supply <- readr::read_csv(""data/Fat_Supply_Quantity_Data.csv"")"
+"2","Error: 'data/Fat_Supply_Quantity_Data.csv' does not exist in current working directory ('C:/Users/mildr/OneDrive/Desktop').
+"

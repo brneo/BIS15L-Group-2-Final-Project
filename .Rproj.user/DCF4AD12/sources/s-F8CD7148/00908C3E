@@ -1,0 +1,32 @@
+{
+    "id": "00908C3E",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1613791806736.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "expression": "food_supply",
+        "caption": "food_supply",
+        "totalObservations": 170,
+        "displayedObservations": 170,
+        "variables": 32,
+        "cacheKey": "F4D09AC9",
+        "object": "food_supply",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=food_supply&cache_key=F4D09AC9&max_cols=50",
+        "preview": 0
+    },
+    "folds": "",
+    "lastKnownWriteTime": 4189038620904877679,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1613791806736,
+    "read_only": false,
+    "read_only_alternatives": []
+}

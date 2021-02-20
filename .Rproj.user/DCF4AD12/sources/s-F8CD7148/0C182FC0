@@ -1,0 +1,32 @@
+{
+    "id": "0C182FC0",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1613791791271.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "expression": "fat_supply",
+        "caption": "fat_supply",
+        "totalObservations": 170,
+        "displayedObservations": 170,
+        "variables": 32,
+        "cacheKey": "1783FB4F",
+        "object": "fat_supply",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=fat_supply&cache_key=1783FB4F&max_cols=50",
+        "preview": 0
+    },
+    "folds": "",
+    "lastKnownWriteTime": 204736534928,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1613791791271,
+    "read_only": false,
+    "read_only_alternatives": []
+}

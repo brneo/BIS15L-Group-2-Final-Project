@@ -69,6 +69,23 @@ food_supply <- food_supply_2 %>%
 food_supply
 ```
 
+#Joining the Data
+```{r}
+initial_join <- full_join(fat_supply, protein_supply, by="Country")
+initial_join
+```
+```{r}
+food_intake <- full_join(initial_join, food_supply, by="Country")
+food_intake
+```
+```{r}
+food_intake <- janitor::clean_names(food_intake)
+```
+
+```{r}
+food_intake[, c(,colnames(food_intake))]
+```
+
 ## Including Plots
 
 You can also embed plots, for example:

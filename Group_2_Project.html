@@ -306,7 +306,7 @@ food_supply_2</code></pre>
 ## 10 Afghanistan Milk - Excluding Butter           7.58  
 ## # ... with 3,730 more rows</code></pre>
 <p>#Joining the Data</p>
-<pre class="r"><code>initial_join &lt;- full_join(fat_supply_2, (protein_supply_2 %&gt;% select(Country, food_division_p)), by=&quot;Country&quot;)
+<pre class="r"><code>initial_join &lt;- left_join(fat_supply_2, (protein_supply_2 %&gt;% select(Country, food_division_p)), by=&quot;Country&quot;)
 initial_join</code></pre>
 <pre><code>## # A tibble: 86,020 x 4
 ##    Country     food_division       food_division_f food_division_p
@@ -322,7 +322,7 @@ initial_join</code></pre>
 ##  9 Afghanistan Alcoholic Beverages               0          3.13  
 ## 10 Afghanistan Alcoholic Beverages               0          5.53  
 ## # ... with 86,010 more rows</code></pre>
-<pre class="r"><code>initial_join_2 &lt;- full_join(initial_join, (food_supply_2 %&gt;% select(Country, food_division_x)), by=&quot;Country&quot;)
+<pre class="r"><code>initial_join_2 &lt;- left_join(initial_join, (food_supply_2 %&gt;% select(Country, food_division_x)), by=&quot;Country&quot;)
 initial_join_2</code></pre>
 <pre><code>## # A tibble: 1,892,440 x 5
 ##    Country     food_division     food_division_f food_division_p food_division_x

@@ -76,15 +76,17 @@ food_supply_2
 
 #Joining the Data
 ```{r}
-initial_join <- full_join(fat_supply_2, (protein_supply_2 %>% select(Country, food_division_p)), by="Country")
+initial_join <- left_join(fat_supply_2, (protein_supply_2 %>% select(Country, food_division_p)), by="Country")
 initial_join
 ```
+
 ```{r}
-initial_join_2 <- full_join(initial_join, (food_supply_2 %>% select(Country, food_division_x)), by="Country")
+initial_join_2 <- left_join(initial_join, (food_supply_2 %>% select(Country, food_division_x)), by="Country")
 initial_join_2
 ```
-
-
+```{r}
+food_intake[, c(colnames(food_intake))]
+```
 
 ## Including Plots
 

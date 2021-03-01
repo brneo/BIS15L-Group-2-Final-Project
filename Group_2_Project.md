@@ -227,7 +227,7 @@ food_supply_2
 #Joining the Data
 
 ```r
-initial_join <- full_join(fat_supply_2, (protein_supply_2 %>% select(Country, food_division_p)), by="Country")
+initial_join <- left_join(fat_supply_2, (protein_supply_2 %>% select(Country, food_division_p)), by="Country")
 initial_join
 ```
 
@@ -248,8 +248,9 @@ initial_join
 ## # ... with 86,010 more rows
 ```
 
+
 ```r
-initial_join_2 <- full_join(initial_join, (food_supply_2 %>% select(Country, food_division_x)), by="Country")
+initial_join_2 <- left_join(initial_join, (food_supply_2 %>% select(Country, food_division_x)), by="Country")
 initial_join_2
 ```
 
@@ -269,7 +270,6 @@ initial_join_2
 ## 10 Afghanistan Alcoholic Bevera~               0               0          7.58  
 ## # ... with 1,892,430 more rows
 ```
-
 
 
 ## Including Plots

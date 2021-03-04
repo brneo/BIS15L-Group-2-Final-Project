@@ -42,26 +42,22 @@ food_supply_clean %>%
 ###Analysis
 ```{r}
 food_supply_clean %>%
-  select(country, deaths) %>%
-  arrange(desc(deaths))
+  select(country, deaths, population) %>%
+  arrange(desc(deaths)) %>% 
+  head(n=3)
 ```
 ```{r}
 food_supply_clean %>%
-  select(country, deaths) %>%
-  arrange(-desc(deaths))
+  select(country, deaths, population) %>%
+  arrange((deaths)) %>% 
+  head(n=3)
 ```
 
 ***Total Protein Consumption by Country, Focusing on those with the Three HIGHEST Death Percentages**
 ```{r}
 food_supply_clean %>%
-  select(country, deaths) %>%
-  filter(country=="Belgium"|country=="Slovenia"|country=="United Kingdom"|country=="United States of America")
-```
-
-```{r}
-food_supply_clean %>%
   filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom") %>%
-  group_by(country, deaths) %>%
+  group_by(country, deaths, population) %>%
   summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))%>%
   arrange(desc(total_protein_consumption))
 ```
@@ -69,27 +65,21 @@ food_supply_clean %>%
 ***Total Protein Consumption by Country, Focusing on those with the Three LOWEST Death Percentages**
 ```{r}
 food_supply_clean %>%
-  select(country, deaths) %>%
-  filter(country=="Cambodia"|country=="Dominica"|country=="Lao People's Democratic Republic")
-```
-
-```{r}
-food_supply_clean %>%
   filter(country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic") %>%
-  group_by(country, deaths) %>%
+  group_by(country, deaths, population) %>%
   summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %>%
   arrange(-desc(total_protein_consumption))
 ```
-
+***Total Protein Consumption by Country, Focusing on those with the United States' Death Percentages***
 ```{r}
 food_supply_clean %>%
   filter(country=="United States of America") %>%
-  group_by(country) %>%
+  group_by(country, deaths, population) %>%
   summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
 ```
 
 ```{r}
-food_supply_clean %>%
+protein_graph<-food_supply_clean %>%
   filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
   group_by(country) %>%
   summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %>%
@@ -98,11 +88,163 @@ food_supply_clean %>%
   labs(title = "Total Protein Consumption by Country (%)",
        x="Country",
        y="Protein Consumption")+
-  coord_flip()+
   theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
+protein_graph
+```
+higher protein because it's a bigger country...
+
+***Total Grain Consumption by Country, Focusing on those with the Three HIGHEST Death Percentages***
+```{r}
+grains_highest <-food_supply_clean %>%
+  group_by(country, deaths, population) %>%
+  filter( country == "United Kingdom"| country == "Slovenia" | country == "Belgium"  ) %>% 
+  summarize(total_grain_consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices))
+grains_highest
+```
+***Total Grain Consumption by Country, Focusing on those with the Three LOWEST Death Percentages***
+```{r}
+grains_lowest <-food_supply_clean %>%
+  group_by(country, deaths, population) %>%
+  filter( country == "Cambodia"| country == "Dominica" | country == "Lao People's Democratic Republic") %>% 
+  summarize(total_grain_consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices))
+grains_lowest
+```
+***Total Protein Consumption by Country, Focusing on those with the United States' Death Percentages***
+```{r}
+grains_us <-food_supply_clean %>%
+  group_by(country, deaths, population) %>%
+  filter( country == "United States of America") %>% 
+  summarize(total_grain_consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices))
+grains_us
 ```
 
-higher protein because it's a bigger country...
+```{r}
+grains_graph <-food_supply_clean %>%
+  group_by(country) %>%
+  filter( country == "Cambodia"| country == "Dominica" | country == "Lao People's Democratic Republic" | country == "United Kingdom"| country == "Slovenia" | country == "Belgium" | country == "United States of America") %>% 
+  summarize(total_grain_consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices)) %>% 
+  ggplot(aes(x = country, y =total_grain_consumption)) + geom_col() +
+  labs(title = "Total Grain Consumption by Country (%)",
+       x="Country",
+       y="Grain Consumption")+
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
+grains_graph
+```
+
+***Total Fruit Consumption by Country, Focusing on those with the Three HIGHEST Death Percentages***
+```{r}
+fruits_highest<-food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom") %>%
+  group_by(country, deaths, population) %>%
+  summarize(total_fruit_consumption = sum(fruits_excluding_wine, stimulants),.groups = 'keep') %>%
+  arrange(desc(deaths))
+fruits_highest
+```
+
+***Total Fruit Consumption by Country, Focusing on those with the Three LOWEST Death Percentages***
+```{r}
+fruits_lowest<-food_supply_clean %>%
+  filter(country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic") %>%
+  group_by(country, deaths, population) %>%
+  summarize(total_fruit_consumption = sum(fruits_excluding_wine, stimulants),.groups = 'keep') %>%
+  arrange(desc(deaths))
+fruits_lowest
+```
+
+***Total Fruit Consumption by Country, Focusing on those with the United States' Death Percentages***
+```{r}
+fruits_us<-food_supply_clean %>%
+  filter(country=="United States of America") %>%
+  group_by(country, deaths, population) %>%
+  summarize(total_fruit_consumption = sum(fruits_excluding_wine, stimulants),
+            .groups = 'keep')
+fruits_us
+```
+
+##Fruit Consumption Table
+```{r}
+fruits_graph<-food_supply_clean %>%
+  filter(country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"| country=="United States of America" | country=="Belgium"| country=="Slovenia"| country=="United Kingdom") %>%
+  group_by(country) %>%
+  summarize(total_fruit_consumption = sum(fruits_excluding_wine, stimulants),.groups = 'keep') %>%
+  ggplot(aes(x=reorder(country, total_fruit_consumption), y=total_fruit_consumption, fill=country))+
+  geom_col()+
+  coord_flip()+
+  theme(legend.position = )+
+  labs(title = "Percentage of Fruit Intake by Country (%)",
+       x="Country",
+       y="Fruit Consumption",
+       fill = "country")
+fruits_graph
+```
+***Total Veggies Consumption by Country, Focusing on those with the Three HIGHEST Death Percentages***
+```{r}
+veggies_highest <-food_supply_clean %>%
+  group_by(country, deaths, population) %>%
+  filter(country == "Belgium" | country == "Slovenia" | country == "United Kingdom") %>% 
+  summarise(total_veggie_consumption = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products))
+veggies_highest
+```
+***Total Veggies Consumption by Country, Focusing on those with the Three HIGHEST Death Percentages***
+```{r}
+veggies_lowest <-food_supply_clean %>%
+  group_by(country, deaths, population) %>%
+  filter(country == "Cambodia" | country == "Dominica" | country == "Lao People's Democratic Republic") %>% 
+  summarise(total_veggie_consumption = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products))
+veggies_lowest
+```
+***Total Veggies Consumption by Country, Focusing on those with the United States' Death Percentages***
+```{r}
+veggies_us <-food_supply_clean %>%
+  group_by(country, deaths, population) %>%
+  filter(country == "United States of America") %>% 
+  summarise(total_veggie_consumption = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products))
+veggies_us
+```
+
+```{r}
+veggies_graph <-food_supply_clean %>%
+  group_by(country) %>%
+  filter( country == "Cambodia"| country == "Dominica" | country == "Lao People's Democratic Republic" | country == "United Kingdom"| country == "Slovenia" | country == "Belgium" | country == "United States of America") %>%
+  summarise(veggie_totals = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products)) %>% 
+  ggplot(aes(x=country, y=veggie_totals))+
+  geom_col()+
+  labs(title = "Total Vegetable Consumption by Country (%)",
+       x="Country",
+       y="Vegetable Consumption")+
+    theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
+veggies_graph
+```
+#mutate each country to fill by letter given to the countries (3 lowest countries will be A and 3 highest countries will be B) or gradient based on value of y axis
+***Total Category Consumption of Each Country***
+```{r}
+total_food_consumption<-food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
+  select(country:obesity, deaths) %>%
+  group_by(country, deaths) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals),
+            total_veggie_consumption = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products),
+            total_fruit_consumption = sum(fruits_excluding_wine, stimulants),
+            total_grain_consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices)) %>% 
+  arrange(desc(deaths))
+total_food_consumption
+```
+
+
+
+***Total Category Consumption of United States***
+```{r}
+food_supply_clean %>%
+  filter(country=="United States of America") %>%
+  group_by(country, deaths, population) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals),
+            total_veggie_consumption = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products),
+            total_fruit_consumption = sum(fruits_excluding_wine, stimulants),
+            total_grain_consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices),
+            .groups = 'keep') %>%
+  arrange(desc(deaths))
+```
+
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.

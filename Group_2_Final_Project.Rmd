@@ -51,46 +51,22 @@ food_supply_clean %>%
   arrange(-desc(deaths))
 ```
 
-***Total Protein Consumption by Country, Focusing on those with the Three Highest Death Percentages**
+***Total Protein Consumption by Country, Focusing on those with the Three HIGHEST Death Percentages**
 ```{r}
 food_supply_clean %>%
   select(country, deaths) %>%
   filter(country=="Belgium"|country=="Slovenia"|country=="United Kingdom"|country=="United States of America")
 ```
-```{r}
-food_supply_clean %>%
-  filter(country=="Belgium") %>%
-  group_by(country) %>%
-  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
-```
-
-```{r}
-food_supply_clean %>%
-  filter(country=="Slovenia") %>%
-  group_by(country) %>%
-  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
-```
-
-```{r}
-food_supply_clean %>%
-  filter(country=="United Kingdom") %>%
-  group_by(country) %>%
-  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
-```
 
 ```{r}
 food_supply_clean %>%
   filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom") %>%
-  group_by(country) %>%
-  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %>%
-  ggplot(aes(x=country, y=total_protein_consumption))+
-  geom_col()+
-  labs(title = "Total Protein Consumption by Country (%)",
-       x="Country",
-       y="Protein Consumption")
+  group_by(country, deaths) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))%>%
+  arrange(desc(total_protein_consumption))
 ```
 
-***Total Protein Consumption by Country, Focusing on those with the Three Lowest Death Percentages**
+***Total Protein Consumption by Country, Focusing on those with the Three LOWEST Death Percentages**
 ```{r}
 food_supply_clean %>%
   select(country, deaths) %>%
@@ -99,35 +75,10 @@ food_supply_clean %>%
 
 ```{r}
 food_supply_clean %>%
-  filter(country=="Cambodia") %>%
-  group_by(country) %>%
-  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
-```
-
-```{r}
-food_supply_clean %>%
-  filter(country=="Dominica") %>%
-  group_by(country) %>%
-  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
-```
-
-```{r}
-food_supply_clean %>%
-  filter(country=="Lao People's Democratic Republic") %>%
-  group_by(country) %>%
-  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
-```
-
-```{r}
-food_supply_clean %>%
   filter(country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic") %>%
-  group_by(country) %>%
+  group_by(country, deaths) %>%
   summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %>%
-  ggplot(aes(x=country, y=total_protein_consumption))+
-  geom_col()+
-  labs(title = "Total Protein Consumption by Country (%)",
-       x="Country",
-       y="Protein Consumption")
+  arrange(-desc(total_protein_consumption))
 ```
 
 ```{r}
@@ -136,6 +87,21 @@ food_supply_clean %>%
   group_by(country) %>%
   summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
 ```
+
+```{r}
+food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %>%
+  ggplot(aes(x=country, y=total_protein_consumption))+
+  geom_col()+
+  labs(title = "Total Protein Consumption by Country (%)",
+       x="Country",
+       y="Protein Consumption")+
+  coord_flip()+
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
+```
+
 higher protein because it's a bigger country...
 ## R Markdown
 

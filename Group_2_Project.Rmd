@@ -39,66 +39,43 @@ protein_supply <- readr::read_csv("data/Protein_Supply_Quantity_Data.csv")
 food_supply <- readr::read_csv("data/Food_Supply_Quantity_kg_Data.csv")
 ```
 
-
 ```{r}
-#fat_supply %>% rename_all(paste0, "_f", -"Country")
-#fat_supply %>% rename_all(paste0, "_f", -Country)
-#fat_supply %>% rename_all(paste0, "_f", -Country_f)
-#fat_supply %>% rename_all(paste0, "_f", -"Country_f")
-#fat_supply %>% rename_all(paste0, "_f")
-#fat_supply
+fat_supply <- fat_supply %>% rename_all(paste0, "_f") %>%
+rename(Country = Country_f)
+fat_supply
 ```
 
 
 ```{r}
-#fat_supply_2 <- fat_supply %>% rename_all(paste0, "_f")
+protein_supply <- protein_supply %>% rename_all(paste0, "_p") %>% rename(Country = Country_p)
+protein_supply
 ```
 
 
 ```{r}
-#fat_supply <- fat_supply_2 %>%
-#rename(Country = Country_f)
-```
-
-
-```{r}
-#fat_supply$Country
-```
-
-
-```{r}
-#fat_supply_2 <- fat_supply %>% rename_all(paste0, "_f")
-```
-
-
-```{r}
-#fat_supply <- fat_supply_2 %>%
-#rename(Country = Country_f)
-#fat_supply
-#fat_supply
-#protein_supply_2 <- protein_supply %>% rename_all(paste0, "_p")
-#protein_supply_2 <- protein_supply %>% rename_all(paste0, "_p")
-#protein_supply <- protein_supply_2 %>%
-#rename(Country = Country_p)
-#protein_supply
-#food_supply_2 <- food_supply %>%
-#rename_all(paste0, "_x")
-#food_supply <- food_supply_2 %>%
-#rename(Country = Country_x)
-##rename(Country = Country_x)
+food_supply <- food_supply %>% rename_all(paste0, "_x") %>% rename(Country = Country_x)
 food_supply
+```
+
+
+```{r}
+
 ```
 
 #Joining the Data
 ```{r}
-#initial_join <- left_join(fat_supply_2, (protein_supply_2 %>% select(Country, food_division_p)), by="Country")
+initial_join <- full_join(fat_supply, protein_supply, by="Country")
+initial_join
 ```
 
 ```{r}
-#initial_join_2 <- left_join(initial_join, (food_supply_2 %>% select(Country, food_division_x)), by="Country")
+final_join <- full_join(initial_join, food_supply, by="Country")
+final_join
 ```
+
 ```{r}
-#food_intake[, c(colnames(food_intake))]
+food_intake <- janitor::clean_names(final_join)
+food_intake
 ```
 
 ## Including Plots

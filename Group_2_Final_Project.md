@@ -534,15 +534,18 @@ fruits_graph<-food_supply_clean %>%
   ggplot(aes(x=reorder(country, total_fruit_consumption), y=total_fruit_consumption, fill=country))+
   geom_col()+
   coord_flip()+
-  theme(legend.position = )+
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())+
   labs(title = "Percentage of Fruit Intake by Country (%)",
-       x="Country",
+       x=NULL,
        y="Fruit Consumption",
        fill = "country")
 fruits_graph
 ```
 
 ![](Group_2_Final_Project_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+#works outside of the "theme" xlab(“”)
 ***Total Veggies Consumption by Country, Focusing on those with the Three HIGHEST Death Percentages***
 
 ```r

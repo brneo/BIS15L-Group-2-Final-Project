@@ -77,6 +77,11 @@ final_join
 food_intake <- janitor::clean_names(final_join)
 food_intake
 ```
+```{r}
+food_intake %>%
+  select(confirmed_x) %>%
+  
+```
 
 ## Including Plots
 

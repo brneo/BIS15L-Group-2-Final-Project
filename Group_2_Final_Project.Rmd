@@ -1,0 +1,73 @@
+---
+title: "group2covidfoodproject"
+author: “Mildred Hernandez, Brian Rezende, Margarita Ibarra, Byron Corado”
+date: "`r Sys.Date()`"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+options(scipen=999) #disables scientific notation when printing
+```
+
+###Loading the Data
+```{r}
+food_supply <- readr::read_csv("data/Food_Supply_Quantity_kg_Data.csv")
+```
+###Cleaning the Data
+```{r}
+food_supply_clean <- janitor::clean_names(food_supply)
+food_supply_clean
+```
+###Viewing the Data
+```{r}
+glimpse(food_supply_clean)
+```
+```{r}
+summary(food_supply_clean)
+```
+
+```{r}
+food_supply_clean %>%
+  naniar::miss_var_summary()
+```
+###Analysis
+```{r}
+food_supply_clean %>%
+  select(country, deaths) %>%
+  arrange(desc(deaths))
+```
+```{r}
+food_supply_clean %>%
+  select(country, deaths) %>%
+  arrange(-desc(deaths))
+```
+
+proteins, obesity vs. country, make bar graph
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

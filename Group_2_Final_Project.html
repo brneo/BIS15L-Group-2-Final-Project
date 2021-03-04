@@ -11,7 +11,7 @@
 
 <meta name="author" content="“Mildred Hernandez, Brian Rezende, Margarita Ibarra, Byron Corado”" />
 
-<meta name="date" content="2021-03-03" />
+<meta name="date" content="2021-03-04" />
 
 <title>group2covidfoodproject</title>
 
@@ -167,7 +167,7 @@ pre code {
 
 <h1 class="title toc-ignore">group2covidfoodproject</h1>
 <h4 class="author">“Mildred Hernandez, Brian Rezende, Margarita Ibarra, Byron Corado”</h4>
-<h4 class="date">2021-03-03</h4>
+<h4 class="date">2021-03-04</h4>
 
 </div>
 
@@ -386,17 +386,106 @@ food_supply_clean</code></pre>
 ##  9 United Republic of Tanzania      0.0000352
 ## 10 Vietnam                          0.0000364
 ## # ... with 160 more rows</code></pre>
-<p>proteins, obesity vs. country, make bar graph ## R Markdown</p>
+<p>*<strong>Total Protein Consumption by Country, Focusing on those with the Three Highest Death Percentages</strong></p>
+<pre class="r"><code>food_supply_clean %&gt;%
+  select(country, deaths) %&gt;%
+  filter(country==&quot;Belgium&quot;|country==&quot;Slovenia&quot;|country==&quot;United Kingdom&quot;|country==&quot;United States of America&quot;)</code></pre>
+<pre><code>## # A tibble: 4 x 2
+##   country                  deaths
+##   &lt;chr&gt;                     &lt;dbl&gt;
+## 1 Belgium                   0.185
+## 2 Slovenia                  0.172
+## 3 United Kingdom            0.167
+## 4 United States of America  0.140</code></pre>
+<pre class="r"><code>food_supply_clean %&gt;%
+  filter(country==&quot;Belgium&quot;) %&gt;%
+  group_by(country) %&gt;%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   country total_protein_consumption
+## * &lt;chr&gt;                       &lt;dbl&gt;
+## 1 Belgium                      35.5</code></pre>
+<pre class="r"><code>food_supply_clean %&gt;%
+  filter(country==&quot;Slovenia&quot;) %&gt;%
+  group_by(country) %&gt;%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   country  total_protein_consumption
+## * &lt;chr&gt;                        &lt;dbl&gt;
+## 1 Slovenia                      37.8</code></pre>
+<pre class="r"><code>food_supply_clean %&gt;%
+  filter(country==&quot;United Kingdom&quot;) %&gt;%
+  group_by(country) %&gt;%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   country        total_protein_consumption
+## * &lt;chr&gt;                              &lt;dbl&gt;
+## 1 United Kingdom                      37.8</code></pre>
+<pre class="r"><code>food_supply_clean %&gt;%
+  filter(country==&quot;Belgium&quot;| country==&quot;Slovenia&quot;| country==&quot;United Kingdom&quot;) %&gt;%
+  group_by(country) %&gt;%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %&gt;%
+  ggplot(aes(x=country, y=total_protein_consumption))+
+  geom_col()+
+  labs(title = &quot;Total Protein Consumption by Country (%)&quot;,
+       x=&quot;Country&quot;,
+       y=&quot;Protein Consumption&quot;)</code></pre>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>*<strong>Total Protein Consumption by Country, Focusing on those with the Three Lowest Death Percentages</strong></p>
+<pre class="r"><code>food_supply_clean %&gt;%
+  select(country, deaths) %&gt;%
+  filter(country==&quot;Cambodia&quot;|country==&quot;Dominica&quot;|country==&quot;Lao People&#39;s Democratic Republic&quot;)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   country                          deaths
+##   &lt;chr&gt;                             &lt;dbl&gt;
+## 1 Cambodia                              0
+## 2 Dominica                              0
+## 3 Lao People&#39;s Democratic Republic      0</code></pre>
+<pre class="r"><code>food_supply_clean %&gt;%
+  filter(country==&quot;Cambodia&quot;) %&gt;%
+  group_by(country) %&gt;%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   country  total_protein_consumption
+## * &lt;chr&gt;                        &lt;dbl&gt;
+## 1 Cambodia                      12.2</code></pre>
+<pre class="r"><code>food_supply_clean %&gt;%
+  filter(country==&quot;Dominica&quot;) %&gt;%
+  group_by(country) %&gt;%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   country  total_protein_consumption
+## * &lt;chr&gt;                        &lt;dbl&gt;
+## 1 Dominica                      17.8</code></pre>
+<pre class="r"><code>food_supply_clean %&gt;%
+  filter(country==&quot;Lao People&#39;s Democratic Republic&quot;) %&gt;%
+  group_by(country) %&gt;%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   country                          total_protein_consumption
+## * &lt;chr&gt;                                                &lt;dbl&gt;
+## 1 Lao People&#39;s Democratic Republic                      7.32</code></pre>
+<pre class="r"><code>food_supply_clean %&gt;%
+  filter(country==&quot;Cambodia&quot;| country==&quot;Dominica&quot;| country==&quot;Lao People&#39;s Democratic Republic&quot;) %&gt;%
+  group_by(country) %&gt;%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %&gt;%
+  ggplot(aes(x=country, y=total_protein_consumption))+
+  geom_col()+
+  labs(title = &quot;Total Protein Consumption by Country (%)&quot;,
+       x=&quot;Country&quot;,
+       y=&quot;Protein Consumption&quot;)</code></pre>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<pre class="r"><code>food_supply_clean %&gt;%
+  filter(country==&quot;United States of America&quot;) %&gt;%
+  group_by(country) %&gt;%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   country                  total_protein_consumption
+## * &lt;chr&gt;                                        &lt;dbl&gt;
+## 1 United States of America                      42.5</code></pre>
+<p>higher protein because it’s a bigger country… ## R Markdown</p>
 <p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
 <p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
 <div id="including-plots" class="section level2">
 <h2>Including Plots</h2>
 <p>You can also embed plots, for example:</p>

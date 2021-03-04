@@ -51,16 +51,98 @@ food_supply_clean %>%
   arrange(-desc(deaths))
 ```
 
-proteins, obesity vs. country, make bar graph
+***Total Protein Consumption by Country, Focusing on those with the Three Highest Death Percentages**
+```{r}
+food_supply_clean %>%
+  select(country, deaths) %>%
+  filter(country=="Belgium"|country=="Slovenia"|country=="United Kingdom"|country=="United States of America")
+```
+```{r}
+food_supply_clean %>%
+  filter(country=="Belgium") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```{r}
+food_supply_clean %>%
+  filter(country=="Slovenia") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```{r}
+food_supply_clean %>%
+  filter(country=="United Kingdom") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```{r}
+food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %>%
+  ggplot(aes(x=country, y=total_protein_consumption))+
+  geom_col()+
+  labs(title = "Total Protein Consumption by Country (%)",
+       x="Country",
+       y="Protein Consumption")
+```
+
+***Total Protein Consumption by Country, Focusing on those with the Three Lowest Death Percentages**
+```{r}
+food_supply_clean %>%
+  select(country, deaths) %>%
+  filter(country=="Cambodia"|country=="Dominica"|country=="Lao People's Democratic Republic")
+```
+
+```{r}
+food_supply_clean %>%
+  filter(country=="Cambodia") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```{r}
+food_supply_clean %>%
+  filter(country=="Dominica") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```{r}
+food_supply_clean %>%
+  filter(country=="Lao People's Democratic Republic") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```{r}
+food_supply_clean %>%
+  filter(country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %>%
+  ggplot(aes(x=country, y=total_protein_consumption))+
+  geom_col()+
+  labs(title = "Total Protein Consumption by Country (%)",
+       x="Country",
+       y="Protein Consumption")
+```
+
+```{r}
+food_supply_clean %>%
+  filter(country=="United States of America") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+higher protein because it's a bigger country...
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
 
 ## Including Plots
 

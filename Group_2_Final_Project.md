@@ -1,7 +1,7 @@
 ---
 title: "group2covidfoodproject"
 author: “Mildred Hernandez, Brian Rezende, Margarita Ibarra, Byron Corado”
-date: "2021-03-03"
+date: "2021-03-04"
 output: 
   html_document: 
     keep_md: yes
@@ -298,27 +298,181 @@ food_supply_clean %>%
 ## # ... with 160 more rows
 ```
 
-proteins, obesity vs. country, make bar graph
+***Total Protein Consumption by Country, Focusing on those with the Three Highest Death Percentages**
+
+```r
+food_supply_clean %>%
+  select(country, deaths) %>%
+  filter(country=="Belgium"|country=="Slovenia"|country=="United Kingdom"|country=="United States of America")
+```
+
+```
+## # A tibble: 4 x 2
+##   country                  deaths
+##   <chr>                     <dbl>
+## 1 Belgium                   0.185
+## 2 Slovenia                  0.172
+## 3 United Kingdom            0.167
+## 4 United States of America  0.140
+```
+
+```r
+food_supply_clean %>%
+  filter(country=="Belgium") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```
+## # A tibble: 1 x 2
+##   country total_protein_consumption
+## * <chr>                       <dbl>
+## 1 Belgium                      35.5
+```
+
+
+```r
+food_supply_clean %>%
+  filter(country=="Slovenia") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```
+## # A tibble: 1 x 2
+##   country  total_protein_consumption
+## * <chr>                        <dbl>
+## 1 Slovenia                      37.8
+```
+
+
+```r
+food_supply_clean %>%
+  filter(country=="United Kingdom") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```
+## # A tibble: 1 x 2
+##   country        total_protein_consumption
+## * <chr>                              <dbl>
+## 1 United Kingdom                      37.8
+```
+
+
+```r
+food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %>%
+  ggplot(aes(x=country, y=total_protein_consumption))+
+  geom_col()+
+  labs(title = "Total Protein Consumption by Country (%)",
+       x="Country",
+       y="Protein Consumption")
+```
+
+![](Group_2_Final_Project_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+
+***Total Protein Consumption by Country, Focusing on those with the Three Lowest Death Percentages**
+
+```r
+food_supply_clean %>%
+  select(country, deaths) %>%
+  filter(country=="Cambodia"|country=="Dominica"|country=="Lao People's Democratic Republic")
+```
+
+```
+## # A tibble: 3 x 2
+##   country                          deaths
+##   <chr>                             <dbl>
+## 1 Cambodia                              0
+## 2 Dominica                              0
+## 3 Lao People's Democratic Republic      0
+```
+
+
+```r
+food_supply_clean %>%
+  filter(country=="Cambodia") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```
+## # A tibble: 1 x 2
+##   country  total_protein_consumption
+## * <chr>                        <dbl>
+## 1 Cambodia                      12.2
+```
+
+
+```r
+food_supply_clean %>%
+  filter(country=="Dominica") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```
+## # A tibble: 1 x 2
+##   country  total_protein_consumption
+## * <chr>                        <dbl>
+## 1 Dominica                      17.8
+```
+
+
+```r
+food_supply_clean %>%
+  filter(country=="Lao People's Democratic Republic") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```
+## # A tibble: 1 x 2
+##   country                          total_protein_consumption
+## * <chr>                                                <dbl>
+## 1 Lao People's Democratic Republic                      7.32
+```
+
+
+```r
+food_supply_clean %>%
+  filter(country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %>%
+  ggplot(aes(x=country, y=total_protein_consumption))+
+  geom_col()+
+  labs(title = "Total Protein Consumption by Country (%)",
+       x="Country",
+       y="Protein Consumption")
+```
+
+![](Group_2_Final_Project_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+
+
+```r
+food_supply_clean %>%
+  filter(country=="United States of America") %>%
+  group_by(country) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals))
+```
+
+```
+## # A tibble: 1 x 2
+##   country                  total_protein_consumption
+## * <chr>                                        <dbl>
+## 1 United States of America                      42.5
+```
+higher protein because it's a bigger country...
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-
-```r
-summary(cars)
-```
-
-```
-##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00
-```
 
 ## Including Plots
 

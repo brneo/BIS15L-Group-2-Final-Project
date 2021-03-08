@@ -233,6 +233,26 @@ total_food_consumption<-food_supply_clean %>%
 total_food_consumption
 ```
 
+```{r}
+obesity_scatter<-food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
+  select(country, obesity, deaths, population) %>%
+  group_by(country, obesity) %>%
+  ggplot(aes(x=country, y=obesity, color=country, shape=country)) +
+  geom_point(size=3) + geom_smooth(method="lm", se=FALSE)+
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
+obesity_scatter
+```
+```{r}
+undernourished_scatter<-food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
+  select(country, undernourished, deaths, population) %>%
+  group_by(country, undernourished) %>%
+  ggplot(aes(x=country, y=undernourished, color=country, shape=country)) +
+  geom_point(size=3) + geom_smooth(method="lm", se=FALSE)+
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
+undernourished_scatter
+```
 
 
 ***Total Category Consumption of United States***

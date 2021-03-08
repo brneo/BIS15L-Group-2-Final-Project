@@ -1,7 +1,7 @@
 ---
 title: "group2covidfoodproject"
 author: “Mildred Hernandez, Brian Rezende, Margarita Ibarra, Byron Corado”
-date: "2021-03-04"
+date: "2021-03-07"
 output: 
   html_document: 
     keep_md: yes
@@ -677,6 +677,60 @@ total_food_consumption
 ## # … with 1 more variable: total_grain_consumption <dbl>
 ```
 
+
+```r
+obesity_scatter<-food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
+  select(country, obesity, deaths, population) %>%
+  group_by(country, obesity) %>%
+  ggplot(aes(x=country, y=obesity, color=country, shape=country)) +
+  geom_point(size=3) + geom_smooth(method="lm", se=FALSE)+
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
+obesity_scatter
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+```
+## Warning: The shape palette can deal with a maximum of 6 discrete values because
+## more than 6 becomes difficult to discriminate; you have 7. Consider
+## specifying shapes manually if you must have them.
+```
+
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
+![](Group_2_Final_Project_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
+
+```r
+undernourished_scatter<-food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
+  select(country, undernourished, deaths, population) %>%
+  group_by(country, undernourished) %>%
+  ggplot(aes(x=country, y=undernourished, color=country, shape=country)) +
+  geom_point(size=3) + geom_smooth(method="lm", se=FALSE)+
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
+undernourished_scatter
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+```
+## Warning: The shape palette can deal with a maximum of 6 discrete values because
+## more than 6 becomes difficult to discriminate; you have 7. Consider
+## specifying shapes manually if you must have them.
+```
+
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
+![](Group_2_Final_Project_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
 
 
 ***Total Category Consumption of United States***

@@ -1,7 +1,7 @@
 ---
 title: "group2covidfoodproject"
 author: “Mildred Hernandez, Brian Rezende, Margarita Ibarra, Byron Corado”
-date: "2021-03-07"
+date: "2021-03-09"
 output: 
   html_document: 
     keep_md: yes
@@ -20,8 +20,8 @@ library(tidyverse)
 
 ```
 ## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
-## ✓ tibble  3.1.0     ✓ dplyr   1.0.4
-## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ tibble  3.1.0     ✓ dplyr   1.0.5
+## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
 ## ✓ readr   1.4.0     ✓ forcats 0.5.1
 ```
 
@@ -352,17 +352,21 @@ food_supply_clean %>%
 ## 1 United States of America  0.140  329878000                      42.5
 ```
 
-
 ```r
 protein_graph<-food_supply_clean %>%
   filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
   group_by(country) %>%
   summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals)) %>%
-  ggplot(aes(x=country, y=total_protein_consumption))+
+  ggplot(aes(x=reorder(country, total_protein_consumption), y=total_protein_consumption, fill=country))+
   geom_col()+
-  labs(title = "Total Protein Consumption by Country (%)",
-       x="Country",
-       y="Protein Consumption")+
+  coord_flip()+
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())+
+  labs(title = "Percentage of Protein Intake by Country (%)",
+       x=NULL,
+       y="Protein Consumption",
+       fill = "country")+
   theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
 protein_graph
 ```
@@ -447,16 +451,21 @@ grains_us
 ## 1 United States of America  0.140  329878000                    10.9
 ```
 
-
 ```r
 grains_graph <-food_supply_clean %>%
   group_by(country) %>%
   filter( country == "Cambodia"| country == "Dominica" | country == "Lao People's Democratic Republic" | country == "United Kingdom"| country == "Slovenia" | country == "Belgium" | country == "United States of America") %>% 
   summarize(total_grain_consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices)) %>% 
-  ggplot(aes(x = country, y =total_grain_consumption)) + geom_col() +
-  labs(title = "Total Grain Consumption by Country (%)",
-       x="Country",
-       y="Grain Consumption")+
+  ggplot(aes(x=reorder(country, total_grain_consumption), y=total_grain_consumption, fill=country))+
+  geom_col()+
+  coord_flip()+
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())+
+  labs(title = "Percentage of Grain Intake by Country (%)",
+       x=NULL,
+       y="Grain Consumption",
+       fill = "country")+
   theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
 grains_graph
 ```
@@ -628,18 +637,24 @@ veggies_us
 veggies_graph <-food_supply_clean %>%
   group_by(country) %>%
   filter( country == "Cambodia"| country == "Dominica" | country == "Lao People's Democratic Republic" | country == "United Kingdom"| country == "Slovenia" | country == "Belgium" | country == "United States of America") %>%
-  summarise(veggie_totals = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products)) %>% 
-  ggplot(aes(x=country, y=veggie_totals))+
+  summarise(total_veggie_consumption = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products)) %>% 
+  ggplot(aes(x=reorder(country, total_veggie_consumption), y=total_veggie_consumption, fill=country))+
   geom_col()+
-  labs(title = "Total Vegetable Consumption by Country (%)",
-       x="Country",
-       y="Vegetable Consumption")+
-    theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
+  coord_flip()+
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())+
+  labs(title = "Percentage of Vegetable Intake by Country (%)",
+       x=NULL,
+       y="Vegetable Consumption",
+       fill = "country")+
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
 veggies_graph
 ```
 
 ![](Group_2_Final_Project_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 #mutate each country to fill by letter given to the countries (3 lowest countries will be A and 3 highest countries will be B) or gradient based on value of y axis
+
 ***Total Category Consumption of Each Country***
 
 ```r
@@ -650,21 +665,14 @@ total_food_consumption<-food_supply_clean %>%
   summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals),
             total_veggie_consumption = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products),
             total_fruit_consumption = sum(fruits_excluding_wine, stimulants),
-            total_grain_consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices)) %>% 
+            total_grain_consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices), .groups = 'keep') %>% 
   arrange(desc(deaths))
-```
-
-```
-## `summarise()` has grouped output by 'country'. You can override using the `.groups` argument.
-```
-
-```r
 total_food_consumption
 ```
 
 ```
 ## # A tibble: 7 x 6
-## # Groups:   country [7]
+## # Groups:   country, deaths [7]
 ##   country        deaths total_protein_cons… total_veggie_cons… total_fruit_cons…
 ##   <chr>           <dbl>               <dbl>              <dbl>             <dbl>
 ## 1 Belgium         0.185               35.5                47.8              4.41
@@ -677,6 +685,7 @@ total_food_consumption
 ## # … with 1 more variable: total_grain_consumption <dbl>
 ```
 
+***Scattered Plots***
 
 ```r
 obesity_scatter<-food_supply_clean %>%
@@ -684,13 +693,9 @@ obesity_scatter<-food_supply_clean %>%
   select(country, obesity, deaths, population) %>%
   group_by(country, obesity) %>%
   ggplot(aes(x=country, y=obesity, color=country, shape=country)) +
-  geom_point(size=3) + geom_smooth(method="lm", se=FALSE)+
+  geom_point(size=3) + #geom_smooth(method="lm", se=FALSE)+
   theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
 obesity_scatter
-```
-
-```
-## `geom_smooth()` using formula 'y ~ x'
 ```
 
 ```
@@ -708,7 +713,7 @@ obesity_scatter
 ```r
 undernourished_scatter<-food_supply_clean %>%
   filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
-  select(country, undernourished, deaths, population) %>%
+  #select(country, undernourished, deaths, population) %>%
   group_by(country, undernourished) %>%
   ggplot(aes(x=country, y=undernourished, color=country, shape=country)) +
   geom_point(size=3) + geom_smooth(method="lm", se=FALSE)+
@@ -731,9 +736,87 @@ undernourished_scatter
 ```
 
 ![](Group_2_Final_Project_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
+***Test app***
+
+```r
+TFC_long <- total_food_consumption %>%
+  pivot_longer(-country,
+               names_to = "category",
+               values_to = "values")
+TFC_long <- TFC_long %>% 
+  filter(category != "deaths")
+TFC_long
+```
+
+```
+## # A tibble: 28 x 3
+## # Groups:   country [7]
+##    country        category                  values
+##    <chr>          <chr>                      <dbl>
+##  1 Belgium        total_protein_consumption  35.5 
+##  2 Belgium        total_veggie_consumption   47.8 
+##  3 Belgium        total_fruit_consumption     4.41
+##  4 Belgium        total_grain_consumption    12.3 
+##  5 Slovenia       total_protein_consumption  37.8 
+##  6 Slovenia       total_veggie_consumption   41.9 
+##  7 Slovenia       total_fruit_consumption     6.70
+##  8 Slovenia       total_grain_consumption    12.9 
+##  9 United Kingdom total_protein_consumption  37.8 
+## 10 United Kingdom total_veggie_consumption   44.1 
+## # … with 18 more rows
+```
 
 
-***Total Category Consumption of United States***
+ui <- dashboardPage( skin="yellow",
+  dashboardHeader(title = "Food Categories of Country"),
+  dashboardSidebar(disable = T),
+  dashboardBody(
+  fluidRow(
+  box(title = "Country Details", width = 3,
+  selectInput("x", "Select Country", choices = c("Afghanistan", "Albania", "Algeria", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bangladesh", "Barbados","Belarus", "Belgium", "Belize", "Benin", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Bulgaria", "Burkina Faso", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Congo", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "French Polynesia", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", "Mauritius", "Mexico", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nepal", "Netherlands", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Panama", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Republic of Moldova", "Romania", "Russian Federation", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Sierra Leone", "Slovakia", "Slovenia", "Solomon Islands", "South Africa", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Taiwan*", "Tajikistan", "Thailand", "Timor-Leste", "Togo", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United Republic of Tanzania", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela (Bolivarian Republic of)", "Vietnam", "Yemen", "Zambia", "Zimbabwe"), 
+              selected = "Afghanistan")),
+  box(title = "Country Details", width = 7,
+  plotOutput("plot", width = "600px", height = "500px")
+  ) 
+  ) 
+  ) 
+)
+
+server <- function(input, output, session) { 
+  
+  output$plot <- renderPlot({
+  country_tfc_long %>%
+  filter(country==input$x) %>%
+  ggplot(aes(x=category, y=values)) +
+  geom_col(fill="blue3", alpha = 0.75, size=4)+
+  labs(x="Country", y="Deaths")+
+  theme_light(base_size = 18) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
+  session$onSessionEnded(stopApp)
+  }
+
+shinyApp(ui, server)
+
+
+```r
+TFC_long %>% 
+  ggplot(aes(x = "", y = values, fill = category))+
+  geom_col(stat = "identity", width = 1, position = 'fill')+
+  coord_polar(theta = "y")+
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())+
+  facet_wrap(~country) + theme_void()
+```
+
+```
+## Warning: Ignoring unknown parameters: stat
+```
+
+![](Group_2_Final_Project_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
+
+***PLAY AROUND CODE***
 
 ```r
 food_supply_clean %>%
@@ -755,6 +838,94 @@ food_supply_clean %>%
 ## 1 United …  0.140  329878000              42.5             41.8             4.79
 ## # … with 1 more variable: total_grain_consumption <dbl>
 ```
+
+
+```r
+country_tfc<-food_supply_clean %>%
+  group_by(country, deaths, population) %>%
+  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals),
+            total_veggie_consumption = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products),
+            total_fruit_consumption = sum(fruits_excluding_wine, stimulants),
+            total_grain_consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices), .groups = 'keep') %>% 
+  arrange(desc(deaths))
+country_tfc
+```
+
+```
+## # A tibble: 170 x 7
+## # Groups:   country, deaths, population [170]
+##    country  deaths population total_protein_c… total_veggie_co… total_fruit_con…
+##    <chr>     <dbl>      <dbl>            <dbl>            <dbl>            <dbl>
+##  1 Belgium   0.185   11515000             35.5             47.8             4.41
+##  2 Slovenia  0.172    2103000             37.8             41.9             6.70
+##  3 United …  0.167   67160000             37.8             44.1             5.20
+##  4 Czechia   0.160   10716000             35.6             45.0             3.53
+##  5 Italy     0.151   60296000             38.1             43.4             6.32
+##  6 Bosnia …  0.146    3281000             24.9             55.4             4.99
+##  7 North M…  0.140    2080000             24.1             60.2             5.34
+##  8 United …  0.140  329878000             42.5             41.8             4.79
+##  9 Portugal  0.136   10255000             37.3             44.5             6.78
+## 10 Bulgaria  0.134    6927000             34.5             44.0             4.26
+## # … with 160 more rows, and 1 more variable: total_grain_consumption <dbl>
+```
+
+```r
+country_tfc_long <- country_tfc %>%
+  pivot_longer(-country,
+               names_to = "category",
+               values_to = "values")
+country_tfc_long <- country_tfc_long %>% 
+  filter(category != "deaths", category != "population")
+country_tfc_long
+```
+
+```
+## # A tibble: 680 x 3
+## # Groups:   country [170]
+##    country        category                  values
+##    <chr>          <chr>                      <dbl>
+##  1 Belgium        total_protein_consumption  35.5 
+##  2 Belgium        total_veggie_consumption   47.8 
+##  3 Belgium        total_fruit_consumption     4.41
+##  4 Belgium        total_grain_consumption    12.3 
+##  5 Slovenia       total_protein_consumption  37.8 
+##  6 Slovenia       total_veggie_consumption   41.9 
+##  7 Slovenia       total_fruit_consumption     6.70
+##  8 Slovenia       total_grain_consumption    12.9 
+##  9 United Kingdom total_protein_consumption  37.8 
+## 10 United Kingdom total_veggie_consumption   44.1 
+## # … with 670 more rows
+```
+
+***Mildred's stuff***
+
+#download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip", #destfile="data/world_shape_file.zip")
+
+
+
+#system("unzip DATA/world_shape_file.zip")
+
+
+
+#world_spdf <- readOGR( 
+#  dsn= paste0("C:/Users/mildr/OneDrive/Desktop/BIS15L-Group-2-Final-Project/data/TM_WORLD_BORDERS_SIMPL-0.3.shp"),
+#  layer="TM_WORLD_BORDERS_SIMPL-0.3",
+#  verbose=FALSE
+#)
+
+#shape_food_join <- full_join(world_spdf, food_supply_clean, by="" )
+#fullJoinDf <- full_join(tableA,tableB,by=”Customer.ID”)
+#View(fullJoinDf)
+
+
+
+#library(leaflet)
+#library(RColorBrewer)library(rgdal)library(ggplot2)
+#library(maps)
+#library(rworldmap)
+#library(ggmap)
+
+
 
 ## R Markdown
 

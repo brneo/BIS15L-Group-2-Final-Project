@@ -20,9 +20,9 @@ library(tidyverse)
 
 ```
 ## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
-## ✓ tibble  3.1.0     ✓ dplyr   1.0.4
+## ✓ tibble  3.0.5     ✓ dplyr   1.0.3
 ## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
-## ✓ readr   1.4.0     ✓ forcats 0.5.1
+## ✓ readr   1.4.0     ✓ forcats 0.5.0
 ```
 
 ```
@@ -51,7 +51,7 @@ library(here)
 ```
 
 ```
-## here() starts at /Users/margaritaibarra/Desktop/BIS15L-Group-2-Final-Project
+## here() starts at /Users/margarita_ibarra/Desktop/BIS15L-Group-2-Final-Project
 ```
 
 ```r
@@ -84,18 +84,18 @@ food_supply_clean
 
 ```
 ## # A tibble: 170 x 32
-##    country      alcoholic_bevera… animal_fats animal_products aquatic_products_…
-##    <chr>                    <dbl>       <dbl>           <dbl>              <dbl>
-##  1 Afghanistan             0.0014      0.197             9.43             0     
-##  2 Albania                 1.67        0.136            18.8              0     
-##  3 Algeria                 0.271       0.0282            9.63             0     
-##  4 Angola                  5.81        0.056             4.93             0     
-##  5 Antigua and…            3.58        0.0087           16.7              0     
-##  6 Argentina               4.27        0.223            19.3              0     
-##  7 Armenia                 0.401       0.183            13.6              0     
-##  8 Australia               5.54        0.314            21.4              0.0033
-##  9 Austria                 7.02        0.856            19.6              0.0011
-## 10 Azerbaijan              3.60        0.254            11.6              0     
+##    country alcoholic_bever… animal_fats animal_products aquatic_product…
+##    <chr>              <dbl>       <dbl>           <dbl>            <dbl>
+##  1 Afghan…           0.0014      0.197             9.43           0     
+##  2 Albania           1.67        0.136            18.8            0     
+##  3 Algeria           0.271       0.0282            9.63           0     
+##  4 Angola            5.81        0.056             4.93           0     
+##  5 Antigu…           3.58        0.0087           16.7            0     
+##  6 Argent…           4.27        0.223            19.3            0     
+##  7 Armenia           0.401       0.183            13.6            0     
+##  8 Austra…           5.54        0.314            21.4            0.0033
+##  9 Austria           7.02        0.856            19.6            0.0011
+## 10 Azerba…           3.60        0.254            11.6            0     
 ## # … with 160 more rows, and 27 more variables: cereals_excluding_beer <dbl>,
 ## #   eggs <dbl>, fish_seafood <dbl>, fruits_excluding_wine <dbl>, meat <dbl>,
 ## #   milk_excluding_butter <dbl>, miscellaneous <dbl>, offals <dbl>,
@@ -115,38 +115,38 @@ glimpse(food_supply_clean)
 ```
 ## Rows: 170
 ## Columns: 32
-## $ country                    <chr> "Afghanistan", "Albania", "Algeria", "Angol…
-## $ alcoholic_beverages        <dbl> 0.0014, 1.6719, 0.2711, 5.8087, 3.5764, 4.2…
-## $ animal_fats                <dbl> 0.1973, 0.1357, 0.0282, 0.0560, 0.0087, 0.2…
-## $ animal_products            <dbl> 9.4341, 18.7684, 9.6334, 4.9278, 16.6613, 1…
-## $ aquatic_products_other     <dbl> 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0…
-## $ cereals_excluding_beer     <dbl> 24.8097, 5.7817, 13.6816, 9.1085, 5.9960, 8…
-## $ eggs                       <dbl> 0.2099, 0.5815, 0.5277, 0.0587, 0.2274, 0.9…
-## $ fish_seafood               <dbl> 0.0350, 0.2126, 0.2416, 1.7707, 4.1489, 0.4…
-## $ fruits_excluding_wine      <dbl> 5.3495, 6.7861, 6.3801, 6.0005, 10.7451, 6.…
-## $ meat                       <dbl> 1.2020, 1.8845, 1.1305, 2.0571, 5.6888, 7.0…
-## $ milk_excluding_butter      <dbl> 7.5828, 15.7213, 7.6189, 0.8311, 6.3663, 10…
-## $ miscellaneous              <dbl> 0.0728, 0.1123, 0.1671, 0.1165, 0.7139, 0.0…
-## $ offals                     <dbl> 0.2057, 0.2324, 0.0870, 0.1550, 0.2219, 0.3…
-## $ oilcrops                   <dbl> 0.0700, 0.9377, 0.3493, 0.4186, 0.2172, 0.0…
-## $ pulses                     <dbl> 0.2953, 0.2380, 0.4783, 0.6507, 0.1840, 0.0…
-## $ spices                     <dbl> 0.0574, 0.0008, 0.0557, 0.0009, 0.1524, 0.0…
-## $ starchy_roots              <dbl> 0.8802, 1.8096, 4.1340, 18.1102, 1.4522, 3.…
-## $ stimulants                 <dbl> 0.3078, 0.1055, 0.2216, 0.0508, 0.1564, 0.4…
-## $ sugar_sweeteners           <dbl> 1.3489, 1.5367, 1.8342, 1.8495, 3.8749, 3.0…
-## $ sugar_crops                <dbl> 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0…
-## $ treenuts                   <dbl> 0.0770, 0.1515, 0.1152, 0.0061, 0.0253, 0.0…
-## $ vegetable_oils             <dbl> 0.5345, 0.3261, 1.0310, 0.6463, 0.8102, 0.9…
-## $ vegetables                 <dbl> 6.7642, 11.7753, 11.6484, 2.3041, 5.4495, 4…
-## $ vegetal_products           <dbl> 40.5645, 31.2304, 40.3651, 45.0722, 33.3233…
-## $ obesity                    <dbl> 4.5, 22.3, 26.6, 6.8, 19.1, 28.5, 20.9, 30.…
-## $ undernourished             <chr> "29.8", "6.2", "3.9", "25", NA, "4.6", "4.3…
-## $ confirmed                  <dbl> 0.142134196, 2.967300916, 0.244897085, 0.06…
-## $ deaths                     <dbl> 0.0061857789, 0.0509513742, 0.0065581532, 0…
-## $ recovered                  <dbl> 0.123373921, 1.792635659, 0.167572198, 0.05…
-## $ active                     <dbl> 0.0125744965, 1.1237138830, 0.0707667335, 0…
-## $ population                 <dbl> 38928000, 2838000, 44357000, 32522000, 9800…
-## $ unit_all_except_population <chr> "%", "%", "%", "%", "%", "%", "%", "%", "%"…
+## $ country                    <chr> "Afghanistan", "Albania", "Algeria", "Ango…
+## $ alcoholic_beverages        <dbl> 0.0014, 1.6719, 0.2711, 5.8087, 3.5764, 4.…
+## $ animal_fats                <dbl> 0.1973, 0.1357, 0.0282, 0.0560, 0.0087, 0.…
+## $ animal_products            <dbl> 9.4341, 18.7684, 9.6334, 4.9278, 16.6613, …
+## $ aquatic_products_other     <dbl> 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.…
+## $ cereals_excluding_beer     <dbl> 24.8097, 5.7817, 13.6816, 9.1085, 5.9960, …
+## $ eggs                       <dbl> 0.2099, 0.5815, 0.5277, 0.0587, 0.2274, 0.…
+## $ fish_seafood               <dbl> 0.0350, 0.2126, 0.2416, 1.7707, 4.1489, 0.…
+## $ fruits_excluding_wine      <dbl> 5.3495, 6.7861, 6.3801, 6.0005, 10.7451, 6…
+## $ meat                       <dbl> 1.2020, 1.8845, 1.1305, 2.0571, 5.6888, 7.…
+## $ milk_excluding_butter      <dbl> 7.5828, 15.7213, 7.6189, 0.8311, 6.3663, 1…
+## $ miscellaneous              <dbl> 0.0728, 0.1123, 0.1671, 0.1165, 0.7139, 0.…
+## $ offals                     <dbl> 0.2057, 0.2324, 0.0870, 0.1550, 0.2219, 0.…
+## $ oilcrops                   <dbl> 0.0700, 0.9377, 0.3493, 0.4186, 0.2172, 0.…
+## $ pulses                     <dbl> 0.2953, 0.2380, 0.4783, 0.6507, 0.1840, 0.…
+## $ spices                     <dbl> 0.0574, 0.0008, 0.0557, 0.0009, 0.1524, 0.…
+## $ starchy_roots              <dbl> 0.8802, 1.8096, 4.1340, 18.1102, 1.4522, 3…
+## $ stimulants                 <dbl> 0.3078, 0.1055, 0.2216, 0.0508, 0.1564, 0.…
+## $ sugar_sweeteners           <dbl> 1.3489, 1.5367, 1.8342, 1.8495, 3.8749, 3.…
+## $ sugar_crops                <dbl> 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.…
+## $ treenuts                   <dbl> 0.0770, 0.1515, 0.1152, 0.0061, 0.0253, 0.…
+## $ vegetable_oils             <dbl> 0.5345, 0.3261, 1.0310, 0.6463, 0.8102, 0.…
+## $ vegetables                 <dbl> 6.7642, 11.7753, 11.6484, 2.3041, 5.4495, …
+## $ vegetal_products           <dbl> 40.5645, 31.2304, 40.3651, 45.0722, 33.323…
+## $ obesity                    <dbl> 4.5, 22.3, 26.6, 6.8, 19.1, 28.5, 20.9, 30…
+## $ undernourished             <chr> "29.8", "6.2", "3.9", "25", NA, "4.6", "4.…
+## $ confirmed                  <dbl> 0.142134196, 2.967300916, 0.244897085, 0.0…
+## $ deaths                     <dbl> 0.0061857789, 0.0509513742, 0.0065581532, …
+## $ recovered                  <dbl> 0.123373921, 1.792635659, 0.167572198, 0.0…
+## $ active                     <dbl> 0.0125744965, 1.1237138830, 0.0707667335, …
+## $ population                 <dbl> 38928000, 2838000, 44357000, 32522000, 980…
+## $ unit_all_except_population <chr> "%", "%", "%", "%", "%", "%", "%", "%", "%…
 ```
 
 ```r
@@ -673,15 +673,15 @@ total_food_consumption
 ```
 ## # A tibble: 7 x 6
 ## # Groups:   country, deaths [7]
-##   country        deaths total_protein_cons… total_veggie_cons… total_fruit_cons…
-##   <chr>           <dbl>               <dbl>              <dbl>             <dbl>
-## 1 Belgium         0.185               35.5                47.8              4.41
-## 2 Slovenia        0.172               37.8                41.9              6.70
-## 3 United Kingdom  0.167               37.8                44.1              5.20
-## 4 United States…  0.140               42.5                41.8              4.79
-## 5 Cambodia        0                   12.2                54.1              2.44
-## 6 Dominica        0                   17.8                56.1             19.6 
-## 7 Lao People's …  0                    7.32               64.7              9.80
+##   country deaths total_protein_c… total_veggie_co… total_fruit_con…
+##   <chr>    <dbl>            <dbl>            <dbl>            <dbl>
+## 1 Belgium  0.185            35.5              47.8             4.41
+## 2 Sloven…  0.172            37.8              41.9             6.70
+## 3 United…  0.167            37.8              44.1             5.20
+## 4 United…  0.140            42.5              41.8             4.79
+## 5 Cambod…  0                12.2              54.1             2.44
+## 6 Domini…  0                17.8              56.1            19.6 
+## 7 Lao Pe…  0                 7.32             64.7             9.80
 ## # … with 1 more variable: total_grain_consumption <dbl>
 ```
 
@@ -833,9 +833,9 @@ food_supply_clean %>%
 ```
 ## # A tibble: 1 x 7
 ## # Groups:   country, deaths, population [1]
-##   country  deaths population total_protein_co… total_veggie_co… total_fruit_con…
-##   <chr>     <dbl>      <dbl>             <dbl>            <dbl>            <dbl>
-## 1 United …  0.140  329878000              42.5             41.8             4.79
+##   country deaths population total_protein_c… total_veggie_co… total_fruit_con…
+##   <chr>    <dbl>      <dbl>            <dbl>            <dbl>            <dbl>
+## 1 United…  0.140  329878000             42.5             41.8             4.79
 ## # … with 1 more variable: total_grain_consumption <dbl>
 ```
 
@@ -854,18 +854,18 @@ country_tfc
 ```
 ## # A tibble: 170 x 7
 ## # Groups:   country, deaths, population [170]
-##    country  deaths population total_protein_c… total_veggie_co… total_fruit_con…
-##    <chr>     <dbl>      <dbl>            <dbl>            <dbl>            <dbl>
-##  1 Belgium   0.185   11515000             35.5             47.8             4.41
-##  2 Slovenia  0.172    2103000             37.8             41.9             6.70
-##  3 United …  0.167   67160000             37.8             44.1             5.20
-##  4 Czechia   0.160   10716000             35.6             45.0             3.53
-##  5 Italy     0.151   60296000             38.1             43.4             6.32
-##  6 Bosnia …  0.146    3281000             24.9             55.4             4.99
-##  7 North M…  0.140    2080000             24.1             60.2             5.34
-##  8 United …  0.140  329878000             42.5             41.8             4.79
-##  9 Portugal  0.136   10255000             37.3             44.5             6.78
-## 10 Bulgaria  0.134    6927000             34.5             44.0             4.26
+##    country deaths population total_protein_c… total_veggie_co… total_fruit_con…
+##    <chr>    <dbl>      <dbl>            <dbl>            <dbl>            <dbl>
+##  1 Belgium  0.185   11515000             35.5             47.8             4.41
+##  2 Sloven…  0.172    2103000             37.8             41.9             6.70
+##  3 United…  0.167   67160000             37.8             44.1             5.20
+##  4 Czechia  0.160   10716000             35.6             45.0             3.53
+##  5 Italy    0.151   60296000             38.1             43.4             6.32
+##  6 Bosnia…  0.146    3281000             24.9             55.4             4.99
+##  7 North …  0.140    2080000             24.1             60.2             5.34
+##  8 United…  0.140  329878000             42.5             41.8             4.79
+##  9 Portug…  0.136   10255000             37.3             44.5             6.78
+## 10 Bulgar…  0.134    6927000             34.5             44.0             4.26
 ## # … with 160 more rows, and 1 more variable: total_grain_consumption <dbl>
 ```
 
@@ -896,6 +896,53 @@ country_tfc_long
 ## 10 United Kingdom total_veggie_consumption   44.1 
 ## # … with 670 more rows
 ```
+**
+
+```r
+food_supply_clean <- food_supply_clean %>% 
+   mutate(undernourished= as.numeric(str_replace(undernourished, '<', '')))
+```
+
+
+```r
+undernourished_bar<-food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
+  select(country, undernourished, deaths, population) %>%
+  group_by(country, undernourished) %>%
+  ggplot(aes(x=country, y=undernourished, fill=country)) +
+  geom_col(alpha=0.5)+
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))+
+  theme(legend.position = "none")+
+  labs(title = "Percentage of Global Undernourished Rates",
+       x = "Country",
+       y = "Undernourished Rate (%)")
+undernourished_bar
+```
+
+![](Group_2_Final_Project_files/figure-html/unnamed-chunk-34-1.png)<!-- -->
+
+```r
+obesity_bar<-food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
+  select(country, obesity, deaths, population) %>%
+  group_by(country, obesity) %>%
+  ggplot(aes(x=country, y=obesity, fill=country, shape=country)) +
+  geom_col(alpha=0.5)+
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))+
+  theme(legend.position = "none")+
+  labs(title = "Percentage of Global Obesity Rates",
+       x = "Country",
+       y = "Obesity Rate (%)")
+obesity_bar
+```
+
+```
+## Warning: The shape palette can deal with a maximum of 6 discrete values because
+## more than 6 becomes difficult to discriminate; you have 7. Consider
+## specifying shapes manually if you must have them.
+```
+
+![](Group_2_Final_Project_files/figure-html/unnamed-chunk-35-1.png)<!-- -->
 
 ***Margarita's Stuff***
 
@@ -958,26 +1005,56 @@ TFC_long2
 ## # … with 18 more rows
 ```
 
+```r
+labels <- TFC_long2$pct
+```
+
+
 
 ```r
-#pies <- TFC_long2 %>% 
- # ggplot(aes(x = "", y = values, fill = cat2))+
-  #geom_col(stat = "identity", width = 1, position = 'fill')+
-  #coord_polar(theta = "y")+
-  #theme(axis.title.y = element_blank(),
-   #     axis.text.y = element_blank(),
-    #    axis.ticks.y = element_blank())+
-  #facet_wrap(~country) + theme_void()+
-  #labs(title = "Food Intake by Country")
+pie2 <- 
+  ggplot(TFC_long2, aes(x="", y = ))
+```
 
-#pies
 
-#pies+
- # geom_text(aes(label = paste0(pct,
-    #                           " (",
-  #                             scales::percent(pct / sum(pct)),
-   #                            ")")),
-    #        position = position_stack(vjust = 0.5))
+```r
+pies <- TFC_long2 %>% 
+  ggplot(aes(x = "", y = pct, fill = cat2))+
+  geom_col(stat = "identity", width = 1, position = 'fill')+
+  coord_polar(theta = "y")+
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())+
+  facet_wrap(~country) + theme_void()+
+  labs(title = "Food Intake by Country")+
+  geom_label(aes(x = 1.10, y = pct, label = pct), fontface = 'bold', color = 'black', size = 5, 
+               show.legend = FALSE, inherit.aes = FALSE) +
+  scale_y_continuous(breaks = NULL) 
+```
+
+```
+## Warning: Ignoring unknown parameters: stat
+```
+
+```r
+pies
+```
+
+![](Group_2_Final_Project_files/figure-html/unnamed-chunk-40-1.png)<!-- -->
+
+```r
+ geom_text(aes(label = paste0(pct,
+                               " (",
+                               scales::percent(pct / sum(pct)),
+                               ")")),
+            position = position_stack(vjust = 0.5))
+```
+
+```
+## mapping: label = ~paste0(pct, " (", scales::percent(pct/sum(pct)), ")") 
+## geom_text: parse = FALSE, check_overlap = FALSE, na.rm = FALSE
+## stat_identity: na.rm = FALSE
+## position_stack
 ```
 
 ***Mildred's stuff***
@@ -1008,6 +1085,60 @@ TFC_long2
 #library(rworldmap)
 #library(ggmap)
 
+***Mildred's Stuff part 2***
+
+
+#library(leaflet)
+#library(RColorBrewer)
+#library(rgdal)
+#library(ggplot2)
+#library(maps)
+#library(rworldmap)
+#library(ggmap)
+
+
+
+#download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip", destfile="data/world_shape_file.zip")
+
+
+#system("unzip DATA/world_shape_file.zip")
+
+
+
+#world_spdf <- readOGR( 
+  dsn= paste0("C:/Users/mildr/OneDrive/Desktop/BIS15L-Group-2-Final-Project/data/TM_WORLD_BORDERS_SIMPL-0.3.shp"), 
+  layer="TM_WORLD_BORDERS_SIMPL-0.3",
+  verbose=FALSE
+
+#covid <- food_supply_clean %>%
+  select(country, deaths, active, confirmed, recovered) %>%
+  rename(NAME="country")
+covid
+
+
+
+
+#covid_shape_join <- full_join(world_spdf@data, covid, by="NAME")
+
+
+
+#world_spdf@data$deaths[ which(world_spdf@data$deaths == 0)] = NA
+
+
+
+
+#world_spdf@data$POP2005 <- as.numeric(as.character(world_spdf@data$POP2005)) / 1000000 %>% round(2)
+
+
+
+#mypalette <- colorNumeric( palette="viridis", domain=world_spdf@data$deaths, na.color="transparent")
+#mypalette(c(45,43))
+
+
+#m <- leaflet(covid_shape_join) %>% 
+  #addTiles() %>%
+  #setView( lat=10, lng=0 , zoom=2) %>%
+  #addPolygons( fillColor = ~mypalette(world_spdf@deaths), stroke=FALSE )
 
 
 ## R Markdown

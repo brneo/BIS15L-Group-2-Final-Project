@@ -20,8 +20,8 @@ library(tidyverse)
 
 ```
 ## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
-## ✓ tibble  3.1.0     ✓ dplyr   1.0.5
-## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+## ✓ tibble  3.1.0     ✓ dplyr   1.0.4
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 ## ✓ readr   1.4.0     ✓ forcats 0.5.1
 ```
 
@@ -51,7 +51,7 @@ library(here)
 ```
 
 ```
-## here() starts at /Users/Zuzu/Desktop/BIS15L-Group-2-Final-Project
+## here() starts at /Users/margaritaibarra/Desktop/BIS15L-Group-2-Final-Project
 ```
 
 ```r
@@ -895,6 +895,89 @@ country_tfc_long
 ##  9 United Kingdom total_protein_consumption  37.8 
 ## 10 United Kingdom total_veggie_consumption   44.1 
 ## # … with 670 more rows
+```
+
+***Margarita's Stuff***
+
+```r
+TFC_long %>% 
+  mutate(pct = round(values, digits = 2))
+```
+
+```
+## # A tibble: 28 x 4
+## # Groups:   country [7]
+##    country        category                  values   pct
+##    <chr>          <chr>                      <dbl> <dbl>
+##  1 Belgium        total_protein_consumption  35.5  35.5 
+##  2 Belgium        total_veggie_consumption   47.8  47.8 
+##  3 Belgium        total_fruit_consumption     4.41  4.41
+##  4 Belgium        total_grain_consumption    12.3  12.3 
+##  5 Slovenia       total_protein_consumption  37.8  37.8 
+##  6 Slovenia       total_veggie_consumption   41.9  41.9 
+##  7 Slovenia       total_fruit_consumption     6.70  6.7 
+##  8 Slovenia       total_grain_consumption    12.9  12.9 
+##  9 United Kingdom total_protein_consumption  37.8  37.8 
+## 10 United Kingdom total_veggie_consumption   44.1  44.1 
+## # … with 18 more rows
+```
+
+```r
+cats <- TFC_long$category
+cats <- str_replace(cats, c('total_protein_consumption'), replacement = 'Protein')
+cats <- str_replace(cats, c('total_veggie_consumption'), replacement = 'Vegetables')
+cats <- str_replace(cats, c('total_fruit_consumption'), replacement = 'Fruits')
+cats <- str_replace(cats, c('total_grain_consumption'), replacement = 'Grains')
+```
+
+
+```r
+TFC_long2 <-TFC_long %>% 
+  mutate(cat2 = category) %>% 
+  mutate(pct = round(values, digits = 2))
+
+TFC_long2$cat2 <- cats
+TFC_long2
+```
+
+```
+## # A tibble: 28 x 5
+## # Groups:   country [7]
+##    country        category                  values cat2         pct
+##    <chr>          <chr>                      <dbl> <chr>      <dbl>
+##  1 Belgium        total_protein_consumption  35.5  Protein    35.5 
+##  2 Belgium        total_veggie_consumption   47.8  Vegetables 47.8 
+##  3 Belgium        total_fruit_consumption     4.41 Fruits      4.41
+##  4 Belgium        total_grain_consumption    12.3  Grains     12.3 
+##  5 Slovenia       total_protein_consumption  37.8  Protein    37.8 
+##  6 Slovenia       total_veggie_consumption   41.9  Vegetables 41.9 
+##  7 Slovenia       total_fruit_consumption     6.70 Fruits      6.7 
+##  8 Slovenia       total_grain_consumption    12.9  Grains     12.9 
+##  9 United Kingdom total_protein_consumption  37.8  Protein    37.8 
+## 10 United Kingdom total_veggie_consumption   44.1  Vegetables 44.1 
+## # … with 18 more rows
+```
+
+
+```r
+#pies <- TFC_long2 %>% 
+ # ggplot(aes(x = "", y = values, fill = cat2))+
+  #geom_col(stat = "identity", width = 1, position = 'fill')+
+  #coord_polar(theta = "y")+
+  #theme(axis.title.y = element_blank(),
+   #     axis.text.y = element_blank(),
+    #    axis.ticks.y = element_blank())+
+  #facet_wrap(~country) + theme_void()+
+  #labs(title = "Food Intake by Country")
+
+#pies
+
+#pies+
+ # geom_text(aes(label = paste0(pct,
+    #                           " (",
+  #                             scales::percent(pct / sum(pct)),
+   #                            ")")),
+    #        position = position_stack(vjust = 0.5))
 ```
 
 ***Mildred's stuff***

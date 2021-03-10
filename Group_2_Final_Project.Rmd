@@ -356,6 +356,49 @@ country_tfc_long <- country_tfc_long %>%
 country_tfc_long
 ```
 
+***Margarita's Stuff***
+```{r}
+TFC_long %>% 
+  mutate(pct = round(values, digits = 2))
+```
+```{r}
+cats <- TFC_long$category
+cats <- str_replace(cats, c('total_protein_consumption'), replacement = 'Protein')
+cats <- str_replace(cats, c('total_veggie_consumption'), replacement = 'Vegetables')
+cats <- str_replace(cats, c('total_fruit_consumption'), replacement = 'Fruits')
+cats <- str_replace(cats, c('total_grain_consumption'), replacement = 'Grains')
+```
+
+```{r}
+TFC_long2 <-TFC_long %>% 
+  mutate(cat2 = category) %>% 
+  mutate(pct = round(values, digits = 2))
+
+TFC_long2$cat2 <- cats
+TFC_long2
+```
+
+```{r}
+#pies <- TFC_long2 %>% 
+ # ggplot(aes(x = "", y = values, fill = cat2))+
+  #geom_col(stat = "identity", width = 1, position = 'fill')+
+  #coord_polar(theta = "y")+
+  #theme(axis.title.y = element_blank(),
+   #     axis.text.y = element_blank(),
+    #    axis.ticks.y = element_blank())+
+  #facet_wrap(~country) + theme_void()+
+  #labs(title = "Food Intake by Country")
+
+#pies
+
+#pies+
+ # geom_text(aes(label = paste0(pct,
+    #                           " (",
+  #                             scales::percent(pct / sum(pct)),
+   #                            ")")),
+    #        position = position_stack(vjust = 0.5))
+```
+
 ***Mildred's stuff***
 
 #download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip", #destfile="data/world_shape_file.zip")

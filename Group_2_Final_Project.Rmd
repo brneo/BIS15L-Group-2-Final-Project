@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(janitor)
 library(here)
+library(scales)
 options(scipen=999) #disables scientific notation when printing
 ```
 
@@ -405,42 +406,30 @@ cats <- str_replace(cats, c('total_grain_consumption'), replacement = 'Grains')
 
 ```{r}
 TFC_long2 <-TFC_long %>% 
-  mutate(cat2 = category) %>% 
-  mutate(pct = round(values, digits = 2))
+  mutate(labels = round(values, digits = 2))
+TFC_long2$grp = cats
+sample <- TFC_long2 %>% 
+  select(country, labels, grp)
+```
 
-TFC_long2$cat2 <- cats
-TFC_long2
-labels <- TFC_long2$pct
+```{r}
+sample2 <- sample %>% 
+  arrange(desc(grp)) %>% 
+  mutate(prop = labels/sum(sample$labels)*100) %>% 
+  mutate(ypos = cumsum(prop)-0.5*prop)
 ```
 
 
 ```{r}
-pie2 <- 
-  ggplot(TFC_long2, aes(x="", y = ))
-```
-
-```{r}
-pies <- TFC_long2 %>% 
-  ggplot(aes(x = "", y = pct, fill = cat2))+
-  geom_col(stat = "identity", width = 1, position = 'fill')+
-  coord_polar(theta = "y")+
-  theme(axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank())+
-  facet_wrap(~country) + theme_void()+
-  labs(title = "Food Intake by Country")+
-  geom_label(aes(x = 1.10, y = pct, label = pct), fontface = 'bold', color = 'black', size = 5, 
-               show.legend = FALSE, inherit.aes = FALSE) +
-  scale_y_continuous(breaks = NULL) 
-
-pies
-
-
- geom_text(aes(label = paste0(pct,
-                               " (",
-                               scales::percent(pct / sum(pct)),
-                               ")")),
-            position = position_stack(vjust = 0.5))
+ggplot(sample2, aes(x="", y = prop, fill = grp))+
+  geom_bar(stat="identity", width=1, color="white") +
+  coord_polar("y", start=0) +
+  theme_void() + 
+  theme(legend.position= "right") +
+  guides(fill = guide_legend(title = "Food Group"))+
+  geom_text(aes(y = ypos, label = percent(labels/100)), color = "black", size=2, angle = 0,) +
+  scale_fill_brewer(palette="Set2")+
+  facet_wrap(~country)
 ```
 
 ***Mildred's stuff***

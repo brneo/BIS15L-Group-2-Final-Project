@@ -1,7 +1,7 @@
 ---
 title: "group2covidfoodproject"
 author: “Mildred Hernandez, Brian Rezende, Margarita Ibarra, Byron Corado”
-date: "2021-03-09"
+date: "2021-03-10"
 output: 
   html_document: 
     keep_md: yes
@@ -52,6 +52,27 @@ library(here)
 
 ```
 ## here() starts at /Users/margarita_ibarra/Desktop/BIS15L-Group-2-Final-Project
+```
+
+```r
+library(scales)
+```
+
+```
+## 
+## Attaching package: 'scales'
+```
+
+```
+## The following object is masked from 'package:purrr':
+## 
+##     discard
+```
+
+```
+## The following object is masked from 'package:readr':
+## 
+##     col_factor
 ```
 
 ```r
@@ -980,82 +1001,35 @@ cats <- str_replace(cats, c('total_grain_consumption'), replacement = 'Grains')
 
 ```r
 TFC_long2 <-TFC_long %>% 
-  mutate(cat2 = category) %>% 
-  mutate(pct = round(values, digits = 2))
-
-TFC_long2$cat2 <- cats
-TFC_long2
+  mutate(labels = round(values, digits = 2))
+TFC_long2$grp = cats
+sample <- TFC_long2 %>% 
+  select(country, labels, grp)
 ```
 
-```
-## # A tibble: 28 x 5
-## # Groups:   country [7]
-##    country        category                  values cat2         pct
-##    <chr>          <chr>                      <dbl> <chr>      <dbl>
-##  1 Belgium        total_protein_consumption  35.5  Protein    35.5 
-##  2 Belgium        total_veggie_consumption   47.8  Vegetables 47.8 
-##  3 Belgium        total_fruit_consumption     4.41 Fruits      4.41
-##  4 Belgium        total_grain_consumption    12.3  Grains     12.3 
-##  5 Slovenia       total_protein_consumption  37.8  Protein    37.8 
-##  6 Slovenia       total_veggie_consumption   41.9  Vegetables 41.9 
-##  7 Slovenia       total_fruit_consumption     6.70 Fruits      6.7 
-##  8 Slovenia       total_grain_consumption    12.9  Grains     12.9 
-##  9 United Kingdom total_protein_consumption  37.8  Protein    37.8 
-## 10 United Kingdom total_veggie_consumption   44.1  Vegetables 44.1 
-## # … with 18 more rows
-```
 
 ```r
-labels <- TFC_long2$pct
+sample2 <- sample %>% 
+  arrange(desc(grp)) %>% 
+  mutate(prop = labels/sum(sample$labels)*100) %>% 
+  mutate(ypos = cumsum(prop)-0.5*prop)
 ```
 
 
 
 ```r
-pie2 <- 
-  ggplot(TFC_long2, aes(x="", y = ))
-```
-
-
-```r
-pies <- TFC_long2 %>% 
-  ggplot(aes(x = "", y = pct, fill = cat2))+
-  geom_col(stat = "identity", width = 1, position = 'fill')+
-  coord_polar(theta = "y")+
-  theme(axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank())+
-  facet_wrap(~country) + theme_void()+
-  labs(title = "Food Intake by Country")+
-  geom_label(aes(x = 1.10, y = pct, label = pct), fontface = 'bold', color = 'black', size = 5, 
-               show.legend = FALSE, inherit.aes = FALSE) +
-  scale_y_continuous(breaks = NULL) 
-```
-
-```
-## Warning: Ignoring unknown parameters: stat
-```
-
-```r
-pies
+ggplot(sample2, aes(x="", y = prop, fill = grp))+
+  geom_bar(stat="identity", width=1, color="white") +
+  coord_polar("y", start=0) +
+  theme_void() + 
+  theme(legend.position= "right") +
+  guides(fill = guide_legend(title = "Food Group"))+
+  geom_text(aes(y = ypos, label = percent(labels/100)), color = "black", size=2, angle = 0,) +
+  scale_fill_brewer(palette="Set2")+
+  facet_wrap(~country)
 ```
 
 ![](Group_2_Final_Project_files/figure-html/unnamed-chunk-40-1.png)<!-- -->
-
-```r
- geom_text(aes(label = paste0(pct,
-                               " (",
-                               scales::percent(pct / sum(pct)),
-                               ")")),
-            position = position_stack(vjust = 0.5))
-```
-
-```
-## mapping: label = ~paste0(pct, " (", scales::percent(pct/sum(pct)), ")") 
-## geom_text: parse = FALSE, check_overlap = FALSE, na.rm = FALSE
-## stat_identity: na.rm = FALSE
-## position_stack
-```
 
 ***Mildred's stuff***
 

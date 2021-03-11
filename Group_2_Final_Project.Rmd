@@ -16,8 +16,12 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(janitor)
 library(here)
+<<<<<<< HEAD
 library(shiny)
 library(shinydashboard)
+=======
+library(scales)
+>>>>>>> 008fdbd89a9ad4b286492e009402f298acf1ecdf
 options(scipen=999) #disables scientific notation when printing
 ```
 
@@ -327,6 +331,81 @@ country_tfc_long <- country_tfc_long %>%
   filter(category != "deaths", category != "population")
 country_tfc_long
 ```
+**
+```{r}
+food_supply_clean <- food_supply_clean %>% 
+   mutate(undernourished= as.numeric(str_replace(undernourished, '<', '')))
+```
+
+```{r}
+undernourished_bar<-food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
+  select(country, undernourished, deaths, population) %>%
+  group_by(country, undernourished) %>%
+  ggplot(aes(x=country, y=undernourished, fill=country)) +
+  geom_col(alpha=0.5)+
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))+
+  theme(legend.position = "none")+
+  labs(title = "Percentage of Global Undernourished Rates",
+       x = "Country",
+       y = "Undernourished Rate (%)")
+undernourished_bar
+```
+```{r}
+obesity_bar<-food_supply_clean %>%
+  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
+  select(country, obesity, deaths, population) %>%
+  group_by(country, obesity) %>%
+  ggplot(aes(x=country, y=obesity, fill=country, shape=country)) +
+  geom_col(alpha=0.5)+
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))+
+  theme(legend.position = "none")+
+  labs(title = "Percentage of Global Obesity Rates",
+       x = "Country",
+       y = "Obesity Rate (%)")
+obesity_bar
+```
+
+***Margarita's Stuff***
+```{r}
+TFC_long %>% 
+  mutate(pct = round(values, digits = 2))
+```
+```{r}
+cats <- TFC_long$category
+cats <- str_replace(cats, c('total_protein_consumption'), replacement = 'Protein')
+cats <- str_replace(cats, c('total_veggie_consumption'), replacement = 'Vegetables')
+cats <- str_replace(cats, c('total_fruit_consumption'), replacement = 'Fruits')
+cats <- str_replace(cats, c('total_grain_consumption'), replacement = 'Grains')
+```
+
+```{r}
+TFC_long2 <-TFC_long %>% 
+  mutate(labels = round(values, digits = 2))
+TFC_long2$grp = cats
+sample <- TFC_long2 %>% 
+  select(country, labels, grp)
+```
+
+```{r}
+sample2 <- sample %>% 
+  arrange(desc(grp)) %>% 
+  mutate(prop = labels/sum(sample$labels)*100) %>% 
+  mutate(ypos = cumsum(prop)-0.5*prop)
+```
+
+
+```{r}
+ggplot(sample2, aes(x="", y = prop, fill = grp))+
+  geom_bar(stat="identity", width=1, color="white") +
+  coord_polar("y", start=0) +
+  theme_void() + 
+  theme(legend.position= "right") +
+  guides(fill = guide_legend(title = "Food Group"))+
+  geom_text(aes(y = ypos, label = percent(labels/100)), color = "black", size=2, angle = 0,) +
+  scale_fill_brewer(palette="Set2")+
+  facet_wrap(~country)
+```
 
 ```{r}
 ui <- dashboardPage( skin="yellow",
@@ -458,6 +537,7 @@ mybins <- c(0,10,20,50,100,500,Inf)
 mypalette <- colorBin( palette="YlOrBr", domain=world_spdf@data$population, na.color="transparent", bins=mybins)
 ```
 
+<<<<<<< HEAD
 ```{r}
 mytext <- paste(
     "Country: ", world_spdf@data$NAME,"<br/>", 
@@ -468,6 +548,62 @@ mytext <- paste(
     sep="") %>%
   lapply(htmltools::HTML)
 ```
+=======
+***Mildred's Stuff part 2***
+
+
+#library(leaflet)
+#library(RColorBrewer)
+#library(rgdal)
+#library(ggplot2)
+#library(maps)
+#library(rworldmap)
+#library(ggmap)
+
+
+
+#download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip", destfile="data/world_shape_file.zip")
+
+
+#system("unzip DATA/world_shape_file.zip")
+
+
+
+#world_spdf <- readOGR( 
+  dsn= paste0("C:/Users/mildr/OneDrive/Desktop/BIS15L-Group-2-Final-Project/data/TM_WORLD_BORDERS_SIMPL-0.3.shp"), 
+  layer="TM_WORLD_BORDERS_SIMPL-0.3",
+  verbose=FALSE
+
+#covid <- food_supply_clean %>%
+  select(country, deaths, active, confirmed, recovered) %>%
+  rename(NAME="country")
+covid
+
+
+
+
+#covid_shape_join <- full_join(world_spdf@data, covid, by="NAME")
+
+
+
+#world_spdf@data$deaths[ which(world_spdf@data$deaths == 0)] = NA
+
+
+
+
+#world_spdf@data$POP2005 <- as.numeric(as.character(world_spdf@data$POP2005)) / 1000000 %>% round(2)
+
+
+
+#mypalette <- colorNumeric( palette="viridis", domain=world_spdf@data$deaths, na.color="transparent")
+#mypalette(c(45,43))
+
+
+#m <- leaflet(covid_shape_join) %>% 
+  #addTiles() %>%
+  #setView( lat=10, lng=0 , zoom=2) %>%
+  #addPolygons( fillColor = ~mypalette(world_spdf@deaths), stroke=FALSE )
+>>>>>>> 008fdbd89a9ad4b286492e009402f298acf1ecdf
 
 ```{r}
 leaflet(world_spdf) %>% 

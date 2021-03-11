@@ -16,12 +16,9 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(janitor)
 library(here)
-<<<<<<< HEAD
 library(shiny)
 library(shinydashboard)
-=======
 library(scales)
->>>>>>> 008fdbd89a9ad4b286492e009402f298acf1ecdf
 options(scipen=999) #disables scientific notation when printing
 ```
 
@@ -258,20 +255,24 @@ total_food_consumption
 ***Scattered Plots***
 ```{r}
 obesity_scatter<-food_supply_clean %>%
-  select(country, obesity, deaths) %>%
+  select(country, obesity, confirmed) %>%
   group_by(country) %>%
-  ggplot(aes(x=deaths, y=obesity)) +
+  ggplot(aes(x=confirmed, y=obesity)) +
   geom_point(size=3) + geom_smooth(method="lm", se=FALSE)+ 
+  scale_x_continuous(labels = function(x) paste0(x, "%"))+
+  scale_y_continuous(labels = function(x) paste0(x, "%"))+
   theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1),legend.position = "none")
 obesity_scatter
 ```
 ```{r}
 undernourished_scatter<-food_supply_clean %>%
   mutate(undernourished= as.numeric(str_replace(undernourished, '<', ''))) %>% 
-  select(country, undernourished, deaths) %>%
+  select(country, undernourished, confirmed) %>%
   group_by(country) %>%
-  ggplot(aes(x=deaths, y=undernourished)) +
+  ggplot(aes(x=confirmed, y=undernourished)) +
   geom_point(size=3) + geom_smooth(method="lm", se=FALSE)+
+  scale_x_continuous(labels = function(x) paste0(x, "%"))+
+  scale_y_continuous(labels = function(x) paste0(x, "%"))+
   theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1),legend.position = "none")
 undernourished_scatter
 ```
@@ -430,12 +431,12 @@ server <- function(input, output, session) {
   filter(country==input$x) %>%
   ggplot(aes(x=category, y=values)) +
   geom_col(fill="blue3", alpha = 0.75, size=4)+
-  geom_segment(aes(x = .55, y = 10, xend = 1.45, yend = 10), color="red")+
-  geom_segment(aes(x = 1.55, y = 30, xend = 2.45, yend = 30), color="red")+
-  geom_segment(aes(x = 2.55, y = 20, xend = 3.45, yend = 20), color="red")+
-  geom_segment(aes(x = 3.55, y = 40, xend = 4.45, yend = 40), color="red")+
+  geom_segment(aes(x = .55, y = 10, xend = 1.45, yend = 10), color="red", size=2)+
+  geom_segment(aes(x = 1.55, y = 30, xend = 2.45, yend = 30), color="red",size=2)+
+  geom_segment(aes(x = 2.55, y = 20, xend = 3.45, yend = 20), color="red", size=2)+
+  geom_segment(aes(x = 3.55, y = 40, xend = 4.45, yend = 40), color="red", size=2)+
   ylim(0,100)+
-  scale_y_continuous(labels = function(x) paste0(x, "%"))+
+  scale_y_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100))+
   labs(x="Food Category", y="Food Intake by (%)")+
   theme_light(base_size = 18) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -490,7 +491,7 @@ world_spdf <- readOGR(
 
 ```{r}
 covid <- food_supply_clean %>%
-  select(country, population, deaths, active, confirmed, recovered) %>%
+  select(country, population, deaths, obesity, undernourished) %>%
   rename(NAME="country")
 covid
 ```
@@ -537,73 +538,17 @@ mybins <- c(0,10,20,50,100,500,Inf)
 mypalette <- colorBin( palette="YlOrBr", domain=world_spdf@data$population, na.color="transparent", bins=mybins)
 ```
 
-<<<<<<< HEAD
+
 ```{r}
 mytext <- paste(
     "Country: ", world_spdf@data$NAME,"<br/>", 
     "Deaths: ", world_spdf@data$deaths, "<br/>", 
-    "Active: ", world_spdf@data$active, "<br/>",
-    "Confirmed: ", world_spdf@data$confirmed, "<br/>",
+    "Obesity: ", world_spdf@data$obesity, "<br/>",
+    "Undernourished: ", world_spdf@data$undernourished, "<br/>",
     "Population: ", round(world_spdf@data$population, 2),
     sep="") %>%
   lapply(htmltools::HTML)
 ```
-=======
-***Mildred's Stuff part 2***
-
-
-#library(leaflet)
-#library(RColorBrewer)
-#library(rgdal)
-#library(ggplot2)
-#library(maps)
-#library(rworldmap)
-#library(ggmap)
-
-
-
-#download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip", destfile="data/world_shape_file.zip")
-
-
-#system("unzip DATA/world_shape_file.zip")
-
-
-
-#world_spdf <- readOGR( 
-  dsn= paste0("C:/Users/mildr/OneDrive/Desktop/BIS15L-Group-2-Final-Project/data/TM_WORLD_BORDERS_SIMPL-0.3.shp"), 
-  layer="TM_WORLD_BORDERS_SIMPL-0.3",
-  verbose=FALSE
-
-#covid <- food_supply_clean %>%
-  select(country, deaths, active, confirmed, recovered) %>%
-  rename(NAME="country")
-covid
-
-
-
-
-#covid_shape_join <- full_join(world_spdf@data, covid, by="NAME")
-
-
-
-#world_spdf@data$deaths[ which(world_spdf@data$deaths == 0)] = NA
-
-
-
-
-#world_spdf@data$POP2005 <- as.numeric(as.character(world_spdf@data$POP2005)) / 1000000 %>% round(2)
-
-
-
-#mypalette <- colorNumeric( palette="viridis", domain=world_spdf@data$deaths, na.color="transparent")
-#mypalette(c(45,43))
-
-
-#m <- leaflet(covid_shape_join) %>% 
-  #addTiles() %>%
-  #setView( lat=10, lng=0 , zoom=2) %>%
-  #addPolygons( fillColor = ~mypalette(world_spdf@deaths), stroke=FALSE )
->>>>>>> 008fdbd89a9ad4b286492e009402f298acf1ecdf
 
 ```{r}
 leaflet(world_spdf) %>% 
@@ -634,11 +579,5 @@ When you click the **Knit** button a document will be generated that includes bo
 
 
 ## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

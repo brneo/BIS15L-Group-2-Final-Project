@@ -384,7 +384,7 @@ obesity_bar<-food_supply_clean %>%
 obesity_bar
 ```
 
-***Margarita's Stuff***
+***Pie Charts***
 ```{r}
 TFC_long %>% 
   mutate(pct = round(values, digits = 2))
@@ -476,14 +476,16 @@ country_tfc %>%
   filter((Protein_Consumption <20) | (Fruit_Consumption <10) & (Grain_Consumption <30) & (Vegetable_Consumption <40))
 ```
 
-***Mildred's stuff***
+***Interactive Map***
 
 ```{r}
 #install.packages('leaflet')
 ```
+
 ```{r}
 #install.packages('maps')
 ```
+
 ```{r}
 #install.packages('rworldmap')
 ```
@@ -507,7 +509,7 @@ download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.z
 
 ```{r}
 world_spdf <- readOGR( 
- dsn= paste0(getwd(),"/data/world_shape_file/"),
+ dsn= paste0("C:/Users/brian/Desktop/BIS15L-Group-2-Final-Project/data/world_shape_file/TM_WORLD_BORDERS_SIMPL-0.3.shp"),
  layer="TM_WORLD_BORDERS_SIMPL-0.3",
   verbose=FALSE
 )
@@ -610,7 +612,3 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-
-## Including Plots
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

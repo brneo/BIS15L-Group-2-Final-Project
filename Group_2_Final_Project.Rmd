@@ -5,6 +5,7 @@ date: "`r Sys.Date()`"
 output: 
   html_document: 
     keep_md: yes
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -15,6 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(janitor)
 library(here)
+library(shiny)
+library(shinydashboard)
 options(scipen=999) #disables scientific notation when printing
 ```
 
@@ -251,22 +254,21 @@ total_food_consumption
 ***Scattered Plots***
 ```{r}
 obesity_scatter<-food_supply_clean %>%
-  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
-  select(country, obesity, deaths, population) %>%
-  group_by(country, obesity) %>%
-  ggplot(aes(x=country, y=obesity, color=country, shape=country)) +
-  geom_point(size=3) + #geom_smooth(method="lm", se=FALSE)+
-  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
+  select(country, obesity, deaths) %>%
+  group_by(country) %>%
+  ggplot(aes(x=deaths, y=obesity)) +
+  geom_point(size=3) + geom_smooth(method="lm", se=FALSE)+ 
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1),legend.position = "none")
 obesity_scatter
 ```
 ```{r}
 undernourished_scatter<-food_supply_clean %>%
-  filter(country=="Belgium"| country=="Slovenia"| country=="United Kingdom"|country=="Cambodia"| country=="Dominica"| country=="Lao People's Democratic Republic"|country=="United States of America") %>%
-  #select(country, undernourished, deaths, population) %>%
-  group_by(country, undernourished) %>%
-  ggplot(aes(x=country, y=undernourished, color=country, shape=country)) +
+  mutate(undernourished= as.numeric(str_replace(undernourished, '<', ''))) %>% 
+  select(country, undernourished, deaths) %>%
+  group_by(country) %>%
+  ggplot(aes(x=deaths, y=undernourished)) +
   geom_point(size=3) + geom_smooth(method="lm", se=FALSE)+
-  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1))
+  theme(plot.title=element_text(hjust=0.5), axis.text.x = element_text(angle = 45, hjust=1),legend.position = "none")
 undernourished_scatter
 ```
 ***Test app***
@@ -280,37 +282,6 @@ TFC_long <- TFC_long %>%
 TFC_long
 ```
 
-
-ui <- dashboardPage( skin="yellow",
-  dashboardHeader(title = "Food Categories of Country"),
-  dashboardSidebar(disable = T),
-  dashboardBody(
-  fluidRow(
-  box(title = "Country Details", width = 3,
-  selectInput("x", "Select Country", choices = c("Afghanistan", "Albania", "Algeria", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bangladesh", "Barbados","Belarus", "Belgium", "Belize", "Benin", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Bulgaria", "Burkina Faso", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Congo", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "French Polynesia", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", "Mauritius", "Mexico", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nepal", "Netherlands", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Panama", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Republic of Moldova", "Romania", "Russian Federation", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Sierra Leone", "Slovakia", "Slovenia", "Solomon Islands", "South Africa", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Taiwan*", "Tajikistan", "Thailand", "Timor-Leste", "Togo", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United Republic of Tanzania", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela (Bolivarian Republic of)", "Vietnam", "Yemen", "Zambia", "Zimbabwe"), 
-              selected = "Afghanistan")),
-  box(title = "Country Details", width = 7,
-  plotOutput("plot", width = "600px", height = "500px")
-  ) 
-  ) 
-  ) 
-)
-
-server <- function(input, output, session) { 
-  
-  output$plot <- renderPlot({
-  country_tfc_long %>%
-  filter(country==input$x) %>%
-  ggplot(aes(x=category, y=values)) +
-  geom_col(fill="blue3", alpha = 0.75, size=4)+
-  labs(x="Country", y="Deaths")+
-  theme_light(base_size = 18) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  })
-  session$onSessionEnded(stopApp)
-  }
-
-shinyApp(ui, server)
 
 ```{r}
 TFC_long %>% 
@@ -339,13 +310,14 @@ food_supply_clean %>%
 ```{r}
 country_tfc<-food_supply_clean %>%
   group_by(country, deaths, population) %>%
-  summarize(total_protein_consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals),
-            total_veggie_consumption = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products),
-            total_fruit_consumption = sum(fruits_excluding_wine, stimulants),
-            total_grain_consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices), .groups = 'keep') %>% 
+  summarize(Protein_Consumption = sum(animal_fats, animal_products, aquatic_products_other, eggs, fish_seafood, meat, milk_excluding_butter, offals),
+            Vegetable_Consumption = sum(starchy_roots, sugar_crops, sugar_sweeteners, treenuts, vegetable_oils, vegetables, vegetal_products),
+            Fruit_Consumption = sum(fruits_excluding_wine, stimulants),
+            Grain_Consumption = sum(alcoholic_beverages, cereals_excluding_beer, oilcrops, pulses, spices), .groups = 'keep') %>% 
   arrange(desc(deaths))
 country_tfc
 ```
+
 ```{r}
 country_tfc_long <- country_tfc %>%
   pivot_longer(-country,
@@ -356,36 +328,168 @@ country_tfc_long <- country_tfc_long %>%
 country_tfc_long
 ```
 
+```{r}
+ui <- dashboardPage( skin="yellow",
+  dashboardHeader(title = "Food Categories of Country"),
+  dashboardSidebar(disable = T),
+  dashboardBody(
+  fluidRow(
+  box(title = "Country Details", width = 3,
+  selectInput("x", "Select Country", choices = c("Afghanistan", "Albania", "Algeria", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bangladesh", "Barbados","Belarus", "Belgium", "Belize", "Benin", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Bulgaria", "Burkina Faso", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Congo", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "French Polynesia", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", "Mauritius", "Mexico", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nepal", "Netherlands", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Panama", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Republic of Moldova", "Romania", "Russian Federation", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Sierra Leone", "Slovakia", "Slovenia", "Solomon Islands", "South Africa", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Taiwan*", "Tajikistan", "Thailand", "Timor-Leste", "Togo", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United Republic of Tanzania", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela (Bolivarian Republic of)", "Vietnam", "Yemen", "Zambia", "Zimbabwe"), 
+              selected = "Afghanistan")),
+  box(title = "Food Intake by Country", width = 7,
+  plotOutput("plot", width = "600px", height = "500px")
+  ) 
+  ) 
+  ) 
+)
+
+server <- function(input, output, session) { 
+  
+  output$plot <- renderPlot({
+  country_tfc_long %>%
+  filter(country==input$x) %>%
+  ggplot(aes(x=category, y=values)) +
+  geom_col(fill="blue3", alpha = 0.75, size=4)+
+  geom_segment(aes(x = .55, y = 10, xend = 1.45, yend = 10), color="red")+
+  geom_segment(aes(x = 1.55, y = 30, xend = 2.45, yend = 30), color="red")+
+  geom_segment(aes(x = 2.55, y = 20, xend = 3.45, yend = 20), color="red")+
+  geom_segment(aes(x = 3.55, y = 40, xend = 4.45, yend = 40), color="red")+
+  ylim(0,100)+
+  scale_y_continuous(labels = function(x) paste0(x, "%"))+
+  labs(x="Food Category", y="Food Intake by (%)")+
+  theme_light(base_size = 18) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
+  session$onSessionEnded(stopApp)
+  }
+
+shinyApp(ui, server)
+```
+```{r}
+country_tfc %>% 
+  group_by(country) %>% 
+  filter((Protein_Consumption <20) | (Fruit_Consumption <10) & (Grain_Consumption <30) & (Vegetable_Consumption <40))
+```
+
 ***Mildred's stuff***
 
-#download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip", #destfile="data/world_shape_file.zip")
+```{r}
+#install.packages('leaflet')
+```
+```{r}
+#install.packages('maps')
+```
+```{r}
+#install.packages('rworldmap')
+```
 
+```{r}
+library(leaflet)
+library(RColorBrewer)
+library(rgdal)
+library(ggplot2)
+library(maps)
+library(rworldmap)
+library(ggmap)
+```
 
+```{r}
+download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip", destfile="data/world_shape_file.zip")
+```
+```{r}
+#system("unzip data/world_shape_file.zip")
+```
 
-#system("unzip DATA/world_shape_file.zip")
+```{r}
+world_spdf <- readOGR( 
+ dsn= paste0(getwd(),"/data/world_shape_file/"),
+ layer="TM_WORLD_BORDERS_SIMPL-0.3",
+  verbose=FALSE
+)
+```
 
+```{r}
+covid <- food_supply_clean %>%
+  select(country, population, deaths, active, confirmed, recovered) %>%
+  rename(NAME="country")
+covid
+```
 
+```{r}
+covid2 <- covid
+renamed <- covid2$NAME
+renamed <- str_replace(renamed, c('United States of America'), replacement = 'United States')
+renamed <- str_replace(renamed, c('Russian Federation'), replacement = 'Russia')
+renamed <- str_replace(renamed, c('Congo'), replacement = 'Democratic Republic of the Congo')
+renamed <- str_replace(renamed, c('United Arab Emirates'), replacement = 'Libyan Arab Jamahiriya')
+renamed <- str_replace(renamed, c('Venezuela Bolivarian Republic of'), replacement = 'Venezuela')
+covid2$NAME = renamed
+```
 
-#world_spdf <- readOGR( 
-#  dsn= paste0("C:/Users/mildr/OneDrive/Desktop/BIS15L-Group-2-Final-Project/data/TM_WORLD_BORDERS_SIMPL-0.3.shp"),
-#  layer="TM_WORLD_BORDERS_SIMPL-0.3",
-#  verbose=FALSE
-#)
+```{r}
+world_spdf@data <- left_join(world_spdf@data, covid2, by="NAME")
+```
 
-#shape_food_join <- full_join(world_spdf, food_supply_clean, by="" )
-#fullJoinDf <- full_join(tableA,tableB,by=”Customer.ID”)
-#View(fullJoinDf)
+```{r}
+world_spdf@data$population[ which(world_spdf@data$population == 0)] = NA
+world_spdf@data$population <- as.numeric(as.character(world_spdf@data$population)) / 1000000 %>% round(2)
+```
 
+```{r}
+mypalette <- colorNumeric( palette="viridis", domain=world_spdf@data$population, na.color="transparent")
+mypalette(c(45,43))
+```
 
+```{r}
+m <- leaflet(world_spdf) %>% 
+  addTiles() %>%
+  setView( lat=10, lng=0 , zoom=2) %>%
+  addPolygons( fillColor = ~mypalette(population), stroke=FALSE )
+```
 
-#library(leaflet)
-#library(RColorBrewer)library(rgdal)library(ggplot2)
-#library(maps)
-#library(rworldmap)
-#library(ggmap)
+```{r}
+m <- leaflet(world_spdf)%>% addTiles()  %>% setView( lat=10, lng=0 , zoom=2) %>%
+  addPolygons( stroke = FALSE, fillOpacity = 0.5, smoothFactor = 0.5, color = ~colorNumeric("Set3", population)(population) )#yellowtored #displaybrewerr
+```
 
+```{r}
+mybins <- c(0,10,20,50,100,500,Inf)
+mypalette <- colorBin( palette="YlOrBr", domain=world_spdf@data$population, na.color="transparent", bins=mybins)
+```
 
+```{r}
+mytext <- paste(
+    "Country: ", world_spdf@data$NAME,"<br/>", 
+    "Deaths: ", world_spdf@data$deaths, "<br/>", 
+    "Active: ", world_spdf@data$active, "<br/>",
+    "Confirmed: ", world_spdf@data$confirmed, "<br/>",
+    "Population: ", round(world_spdf@data$population, 2),
+    sep="") %>%
+  lapply(htmltools::HTML)
+```
 
+```{r}
+leaflet(world_spdf) %>% 
+  addTiles()  %>% 
+  setView( lat=10, lng=0 , zoom=2) %>%
+  addPolygons( 
+    fillColor = ~mypalette(population), 
+    stroke=TRUE, 
+    fillOpacity = 0.9, 
+    color="white", 
+    weight=0.3,
+    label = mytext,
+    labelOptions = labelOptions( 
+      style = list("font-weight" = "normal", padding = "3px 8px"), 
+      textsize = "13px", 
+      direction = "auto"
+    )
+  ) %>%
+  addLegend( pal=mypalette, values=~population, opacity=0.9, title = "Population (M)", position = "bottomleft" )
+
+m  
+```
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
